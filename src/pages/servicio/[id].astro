@@ -1,0 +1,27 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/Navbar.astro';
+import Footer from '@/components/Footer.astro';
+import ServiceDetail from '@/components/ServiceDetail.astro';
+import { getServiceById, getPublishedServices } from '@/lib/services';
+import RelatedServices from '@/sections/servicio/RelatedServices.astro';
+
+export function getStaticPaths() {
+  const services = getPublishedServices();
+  return services.map((service) => ({
+    params: { id: service.id },
+    props: { service, allServices: services },
+  }));
+}
+
+const { service, allServices } = Astro.props;
+---
+
+<Layout title={`${service.nombre} — Catálogo`}>
+  <Navbar />
+  <main class="w-full max-w-4xl mx-auto px-5 min-h-dvh py-10 space-y-10">
+    <ServiceDetail service={service} />
+    <RelatedServices currentService={service} services={allServices} />
+  </main>
+  <Footer />
+</Layout>

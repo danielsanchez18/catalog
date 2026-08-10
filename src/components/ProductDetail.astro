@@ -1,0 +1,68 @@
+---
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, ShoppingBag, Tag } from 'lucide-react';
+import { createElement } from 'react';
+import type { Product } from '@/lib/types';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+
+const backLink = createElement('a', { href: '/productos' });
+
+const formatPrice = (price: number) =>
+  price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+---
+
+<Button
+  variant="link"
+  className="w-fit p-0"
+  render={backLink}
+>
+  <ArrowLeft className="size-4" />
+  Volver al catálogo
+</Button>
+
+<article class="grid sm:grid-cols-2 gap-8">
+  <div class="relative overflow-hidden rounded-lg bg-accent h-80 sm:h-full min-h-64">
+    <img
+      src={product.imagen_url}
+      alt={product.nombre}
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+    <p class="absolute top-3 left-3 rounded-full w-fit bg-white px-3 py-1 text-xs font-mono font-medium z-10">
+      <Tag className="inline size-3 mr-1" />
+      Publicado
+    </p>
+  </div>
+
+  <div class="flex flex-col gap-y-4 py-2">
+    <div class="space-y-1">
+      <p class="text-sm text-muted-foreground">Detalle del producto</p>
+      <h1 class="text-3xl tracking-tighter font-medium">{product.nombre}</h1>
+    </div>
+
+    <p class="text-sm leading-relaxed text-neutral-800">
+      {product.descripcion}
+    </p>
+
+    <div class="border-t border-border pt-4">
+      <p class="text-2xl font-mono font-medium">{formatPrice(product.precio)}</p>
+    </div>
+
+    <Button className="rounded-full w-fit px-4 mt-2">
+      <ShoppingBag />
+      Agregar al carrito
+    </Button>
+
+    <p class="text-xs text-muted-foreground mt-auto">
+      Publicado el {new Date(product.created_at).toLocaleDateString('es-MX', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })}
+    </p>
+  </div>
+</article>

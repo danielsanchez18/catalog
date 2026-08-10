@@ -1,4 +1,5 @@
 ---
+import ButtonWhatsapp from '@/components/ButtonWhatsapp.astro';
 import '@/styles/global.css';
 ---
 
@@ -12,8 +13,11 @@ import '@/styles/global.css';
 		<meta name="generator" content={Astro.generator} />
 		<title>Catálogo</title>
 	</head>
-	<body class="h-dvh">
+	<body class="h-dvh relative">
 		<slot />
+		<div class=" fixed bottom-5">
+			<ButtonWhatsapp />
+		</div>
 	</body>
 </html>
 

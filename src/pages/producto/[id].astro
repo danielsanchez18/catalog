@@ -1,0 +1,35 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/Navbar.astro';
+import Footer from '@/components/Footer.astro';
+import ProductDetail from '@/components/ProductDetail.astro';
+import { getPublishedProducts } from '@/lib/products';
+import RelatedProducts from '@/sections/producto/RelatedProducts.astro';
+
+export function getStaticPaths() {
+  const products = getPublishedProducts();
+  return products.map((product) => ({
+    params: { id: product.id },
+    props: { product, allProducts: products },
+  }));
+}
+
+const { product, allProducts } = Astro.props;
+---
+
+<Layout title={`${product.nombre} — Catálogo`}>
+  <Navbar />
+  <main class="w-full max-w-4xl mx-auto px-5 min-h-dvh py-10 space-y-10">
+    
+    <ProductDetail 
+      product={product} 
+    />
+    
+    <RelatedProducts 
+      currentProduct={product} 
+      products={allProducts} 
+    />
+    
+  </main>
+  <Footer />
+</Layout>

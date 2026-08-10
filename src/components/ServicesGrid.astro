@@ -1,12 +1,12 @@
 ---
 import ServiceCard from "./ServiceCard.astro";
+import { getPublishedServices } from '@/lib/services';
+
+const services = getPublishedServices();
 ---
 
 <section class="grid sm:grid-cols-2 gap-3">
-    <ServiceCard />
-    <ServiceCard />
-    <ServiceCard />
-    <ServiceCard />
-    <ServiceCard />
-    <ServiceCard />
+    {services.map((service) => (
+        <ServiceCard service={service} />
+    ))}
 </section>
