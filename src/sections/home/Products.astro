@@ -1,0 +1,20 @@
+---
+import CategoriesBar from "@/components/CategoriesBar.astro";
+import ProductGrid from "@/components/ProductGrid.astro";
+import { Button } from "@/components/ui/button";
+---
+
+<section class="w-full space-y-10">
+
+    <div class="space-y-1">
+        <p class="text-sm">Descubre variedad</p>
+        <h2 class="text-2xl font-display uppercase font-medium">Nuestros Productos</h2>
+    </div>
+
+    <div class="flex flex-col gap-y-10">
+        <CategoriesBar />
+        <ProductGrid />
+        <Button variant="outline" className="px-3 rounded-full mx-auto">Ver más</Button>
+    </div>
+
+</section>

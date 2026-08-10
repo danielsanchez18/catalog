@@ -1,0 +1,43 @@
+---
+import { Button } from '@/components/ui/button';
+import { Search, ShoppingBag } from 'lucide-react';
+---
+<nav class="w-full px-3 py-2">
+    <div class="w-full max-w-4xl mx-auto pl-5 px-3 py-2 bg-secondary rounded-full flex items-center gap-x-5 border">
+        
+        <!-- <img src="favicon.svg" alt="Logo" class="h-7 w-auto invert ml-1" /> -->
+        
+        <div class="flex items-center gap-x-3">
+            <a 
+                href="/"
+                class="text-sm hover:underline font-medium">
+                Inicio
+            </a>
+            <a 
+                href="/"
+                class="text-sm hover:underline font-medium">
+                Productos
+            </a>
+            <a 
+                href="/"
+                class="text-sm hover:underline font-medium">
+                Servicios
+            </a>
+        </div>
+
+        <div class="ml-auto flex items-center gap-x-1">
+            <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full hover:bg-white">
+                <Search className="h-4 w-4" />
+            </Button>
+            <Button
+                variant="outline"
+                className="rounded-full hover:bg-white px-3">
+                Contacto
+            </Button>
+        </div>
+
+    </div>
+</nav>

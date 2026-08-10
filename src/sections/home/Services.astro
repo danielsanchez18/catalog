@@ -1,0 +1,54 @@
+---
+import { ArrowRight } from 'lucide-react';
+---
+
+<section class="w-full space-y-10">
+
+    <div class="space-y-1">
+        <p class="text-sm">Encuentra lo que más te guste</p>
+        <h2 class="text-2xl font-display uppercase font-medium">Explora nuestros servicios</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-3">
+
+        <div class="h-100 w-full border rounded-xl relative overflow-hidden group">
+            <div class="h-full w-full absolute top-0 left-0 bg-secondary">
+                <img 
+                    src="https://imgs.search.brave.com/umpJJGak63p3PNlV2NUkY1GEv8ksldCrlc4-LBTLpMg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc3F1YXJlc3Bh/Y2UtY2RuLmNvbS9j/b250ZW50L3YxLzYw/NTRkMjY0MDU0ZGYw/NWY0YWJmNWJhZC8x/ODVhNzUxYy0yMDFj/LTRkODAtODYyOC03/MjcyOGQyODcwNjgv/cXVpbmNlYW5lcmFz/LWdhbGxlcnktMS5q/cGc" 
+                    alt="Productos variados" class="h-full w-full object-cover group-hover:scale-105 transition duration-300" />
+            </div>
+            <div class="z-10 h-full w-full absolute top-0 left-0 p-4 flex flex-col justify-between">
+                <p class="text-xs rounded-full px-3 py-1.5 bg-white backdrop-blur-xl w-fit font-medium font-mono">Productos / Venta directa</p>
+
+                <div class="space-y-0.5 px-5 py-4 bg-white backdrop-blur-xl rounded-xl">
+                    <div class="flex items-center gap-x-2">
+                        <h3 class="text-lg font-medium font-sans">Productos variados</h3>
+                        <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition" />
+                    </div>
+                    <p class="text-sm">Papelería, joyería, cuidado personal.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="h-100 w-full border rounded-xl relative overflow-hidden group">
+            <div class="h-full w-full absolute top-0 left-0 bg-secondary">
+                <img 
+                    src="https://imgs.search.brave.com/lMuCxzqmtJTqf6XC0mqdU70yj-gZkmfLMJLL-WTa8pQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNTM4/MjEwMzY4L2VzL2Zv/dG8vdGVlbmFnZXIt/c2hvcHBpbmctZm9y/LXNjaG9vbC1zdXBw/bGllcy1pbi1hLXN1/cGVybWFya2V0Lmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz0t/YlNFYVVJTDFLZTIz/OEN3enV0SHVXbTFm/VU9qakZMOXhHYllK/ek03bW5vPQ" 
+                    alt="Momentos para crear" class="h-full w-full object-cover group-hover:scale-105 transition duration-300" />
+            </div>
+            <div class="z-10 h-full w-full absolute top-0 left-0 p-4 flex flex-col justify-between">
+                <p class="text-xs rounded-full px-3 py-1.5 bg-white backdrop-blur-xl w-fit font-medium font-mono">Eventos / Servicios</p>
+
+                <div class="space-y-0.5 px-5 py-4 bg-white backdrop-blur-xl rounded-xl">
+                    <div class="flex items-center gap-x-2">
+                        <h3 class="text-lg font-medium font-sans">Momentos para crear</h3>
+                        <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition" />
+                    </div>
+                    <p class="text-sm">Eventos, arreglos florales, repostería personalizada.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>

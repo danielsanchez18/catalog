@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '@/components/Navbar.astro';
+import Hero from '@/sections/home/Hero.astro';
+import Services from '@/sections/home/Services.astro';
+import Products from '@/sections/home/Products.astro';
+import Footer from '@/components/Footer.astro';
+---
+
+<Layout>
+	<Navbar />
+	<main class="min-h-dvh">
+		<div class="mt-5">
+			<Hero />
+		</div>
+		<div class="mx-auto max-w-4xl px-5 py-20 space-y-20">
+			<Services />
+			<Products />
+		</div>
+	</main>
+	<Footer />
+</Layout>

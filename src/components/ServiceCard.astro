@@ -1,0 +1,25 @@
+---
+import { Button } from '@/components/ui/button';
+---
+
+<button class="border border-border rounded-lg p-3 group hover:bg-accent cursor-pointer transition text-start">
+    
+    <div class="relative overflow-hidden rounded-md bg-accent h-60">
+        <img 
+            src="https://imgs.search.brave.com/umpJJGak63p3PNlV2NUkY1GEv8ksldCrlc4-LBTLpMg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc3F1YXJlc3Bh/Y2UtY2RuLmNvbS9j/b250ZW50L3YxLzYw/NTRkMjY0MDU0ZGYw/NWY0YWJmNWJhZC8x/ODVhNzUxYy0yMDFj/LTRkODAtODYyOC03/MjcyOGQyODcwNjgv/cXVpbmNlYW5lcmFz/LWdhbGxlcnktMS5q/cGc"
+            class="absolute top-0 left-0 w-full h-full z-10 group-hover:scale-105 transition duration-300" />
+        <p class="absolute top-3 left-3 rounded-full w-fit bg-white px-3 py-1 text-xs font-mono font-medium z-20">Tag</p>
+    </div>
+
+    <div class="flex flex-col gap-y-1 px-1 py-2 mt-2">
+        <h3 class="font-medium line-clamp-2 font-sans">Nombre completo del servicio</h3>
+        <p class="text-sm text-neutral-800 line-clamp-3">Thoughtful outdoor structures, tablescapes, and on-site styling for gatherings of every size.</p>
+        <a
+            href="/"
+            class="rounded-full">
+            <Button className="rounded-full">
+                Cotizar
+            </Button>
+        </a>
+    </div>
+</button>
