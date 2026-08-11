@@ -15,13 +15,13 @@ Estado: propuesto
 [Admin despublica / elimina] ◀─────────────────────────────────────────────┘
 ```
 
-- `borrador`: visible solo en la zona admin.
+- `borrador`: visible solo en el dashboard.
 - `publicado`: visible en el catálogo público.
 
 ## Flujos transversales
 
 1. **Navegación del visitante**: home → listado del catálogo → detalle de producto.
-2. **Gestión del admin**: login → panel `/admin` → CRUD de productos → publicar/despublicar.
+2. **Gestión del admin**: login → panel `/dashboard` → CRUD de productos → publicar/despublicar.
 3. **Datos**: las mutaciones pasan por Supabase y requieren sesión; las rutas públicas solo leen.
 
 ## Detalle por módulo

@@ -1,0 +1,33 @@
+---
+import { Button } from '@/components/ui/button';
+import { Bell } from 'lucide-react';
+---
+
+<header class="w-full border-b border-border">
+    <div class="w-full max-w-7xl mx-auto px-5 py-2 flex items-center justify-between gap-x-5">
+
+        <div class="flex items-center gap-x-1">
+            <img src="/favicon.svg" alt="Logo" class="h-7 w-auto invert" />
+            <!-- <h1 class="font-display uppercase">Dashboard</h1> -->
+        </div>
+
+        <div class="flex items-center gap-x-2">
+            <Button
+                variant="ghost"
+                size="icon">
+                <Bell />
+            </Button>
+            <Button
+                variant="secondary"
+                size="icon-lg"
+                className="rounded-full overflow-hidden">
+                <img 
+                    src="https://avatars.githubusercontent.com/u/148911330?v=4" 
+                    alt="" 
+                    class="h-full w-full object-cover" 
+                />
+            </Button>
+        </div>
+
+    </div>
+</header>

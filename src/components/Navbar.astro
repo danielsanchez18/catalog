@@ -25,7 +25,13 @@ import { Search, ShoppingBag } from 'lucide-react';
             </a>
         </div>
 
-        <div class="ml-auto flex items-center gap-x-1">
+        <div class="ml-auto flex items-center gap-x-0.5">
+            <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full hover:bg-white">
+                <ShoppingBag className="h-4 w-4" />
+            </Button>
             <Button
                 variant="ghost"
                 size="icon"
@@ -34,7 +40,7 @@ import { Search, ShoppingBag } from 'lucide-react';
             </Button>
             <Button
                 variant="outline"
-                className="rounded-full hover:bg-white px-3">
+                className="ml-1 rounded-full hover:bg-white px-3">
                 Contacto
             </Button>
         </div>

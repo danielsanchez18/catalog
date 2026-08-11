@@ -1,0 +1,15 @@
+---
+import Header from '@/components/dashboard/Header.astro';
+import Navlink from '@/components/dashboard/Navlink.astro';
+import Dashboard from '@/layouts/Dashboard.astro';
+import Greeting from '@/sections/dashboard/overview/Greeting.astro';
+---
+
+<Dashboard>
+    <Header />
+    <Navlink />
+
+    <div class="w-full max-w-7xl mx-auto px-5 py-7 space-y-10">
+        <Greeting />
+    </div>
+</Dashboard>

@@ -13,7 +13,7 @@ Estado: propuesta inicial — pendiente de revisión (ver `docs/adr/0001-stack-t
 
 ```
 [Visitante] ──▶ Astro (SSR/SSG) ──▶ Supabase Postgres   (lectura pública)
-[Admin]     ──▶ Rutas /admin/*    ──▶ Supabase Auth + Postgres + Storage   (escritura)
+[Admin]     ──▶ Rutas /dashboard/* ──▶ Supabase Auth + Postgres + Storage   (escritura)
 ```
 
 ## Decisiones clave
@@ -26,7 +26,7 @@ Estado: propuesta inicial — pendiente de revisión (ver `docs/adr/0001-stack-t
 
 ```
 src/
-├── pages/          # Rutas (públicas y /admin)
+├── pages/          # Rutas (públicas y /dashboard)
 ├── layouts/        # Layouts globales
 ├── components/     # Componentes Astro y islas (ui/ para shadcn)
 ├── lib/            # Lógica de dominio, tipos y clientes de Supabase

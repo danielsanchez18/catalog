@@ -8,8 +8,10 @@ import Footer from '@/components/Footer.astro';
 ---
 
 <Layout>
-	<Navbar />
-	<main class="min-h-dvh">
+	<div class="fixed top-0 left-0 w-full z-50">
+		<Navbar />
+	</div>
+	<main class="mt-21 min-h-dvh">
 		<div class="mt-5">
 			<Hero />
 		</div>

@@ -23,7 +23,7 @@ Estado: adoptado
 
 - Nombres de archivo en `kebab-case`.
 - Un componente por archivo.
-- Páginas de administración bajo `src/pages/admin/`.
+- Páginas del panel de administración bajo `src/pages/dashboard/`.
 - Componentes de UI base (shadcn) bajo `src/components/ui/`.
 
 ## UI y estilos

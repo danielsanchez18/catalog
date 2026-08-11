@@ -12,7 +12,7 @@ sin sesión válida no debe ser posible crear, editar o eliminar productos.
 ### Incluye
 
 - Login/logout del admin único con **Supabase Auth** (email + contraseña).
-- Protección de las rutas `/admin/*` (redirección a login si no hay sesión).
+- Protección de las rutas `/dashboard/*` (redirección a `/login` si no hay sesión).
 - Verificación de sesión en el **servidor** para las mutaciones de datos.
 
 ### No incluye (por ahora)
@@ -25,16 +25,16 @@ sin sesión válida no debe ser posible crear, editar o eliminar productos.
 ## Reglas de negocio
 
 1. Existe **un solo admin**; no hay registro público.
-2. Las rutas bajo `/admin/*` redirigen a `/admin/login` si no hay sesión.
+2. Las rutas bajo `/dashboard/*` redirigen a `/login` si no hay sesión.
 3. Las mutaciones verifican sesión en el servidor, no solo en el cliente.
 4. RLS en Postgres habilitada: el admin es dueño (`owner`) de los datos de productos.
 
 ## Flujo
 
-1. Admin visita `/admin/login` e ingresa credenciales.
+1. Admin visita `/login` e ingresa credenciales.
 2. Supabase Auth valida y emite la sesión.
-3. Un guard/middleware de Astro protege `/admin/*`.
-4. Al cerrar sesión se vuelve a `/admin/login`.
+3. Un guard/middleware de Astro protege `/dashboard/*`.
+4. Al cerrar sesión se vuelve a `/login`.
 
 ## Datos
 

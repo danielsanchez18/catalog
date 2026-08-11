@@ -31,7 +31,7 @@ Gestionar los productos que se muestran en el catálogo: crear, leer, editar, pu
 
 ## Flujo de CRUD
 
-1. Admin inicia sesión y entra a `/admin/productos`.
+1. Admin inicia sesión y entra a `/dashboard/productos`.
 2. Ve la lista de productos con su estado (borrador / publicado).
 3. Crea/edita con un formulario validado → guarda en Supabase.
 4. Publica/despublica con un toggle.

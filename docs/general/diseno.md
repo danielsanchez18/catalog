@@ -60,7 +60,7 @@ Fuentes auto-alojadas con `@fontsource-variable` (variable fonts):
 1. Usar componentes de `src/components/ui/` (shadcn) en lugar de elementos crudos.
 2. Modo claro/oscuro: soportado por el `@custom-variant dark` de `global.css`; activar con la clase `.dark`.
 3. No inventar botones: usar el `Button` con su `variant` y `size`.
-4. Reutilizar componentes de producto (`ProductCard`, `ProductGrid`, etc.) en catálogo y admin.
+4. Reutilizar componentes de producto (`ProductCard`, `ProductGrid`, etc.) en catálogo y dashboard.
 
 ## Referencias
 
