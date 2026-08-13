@@ -3,14 +3,15 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '@/components/Navbar.astro';
 import Footer from '@/components/Footer.astro';
 import Title from '@/sections/servicios/Title.astro';
-import ServicesGrid from '@/components/ServicesGrid.astro';
+import ServicesGrid from '@/components/ServicesGrid';
+import { getPublishedServices } from '@/lib/services';
 ---
 
 <Layout>
 	<Navbar />
 	<main class="w-full max-w-4xl mx-auto px-5 min-h-dvh py-10 space-y-10">
 		<Title />
-		<ServicesGrid />
+		<ServicesGrid services={getPublishedServices()} />
 	</main>
 	<Footer />
 </Layout>

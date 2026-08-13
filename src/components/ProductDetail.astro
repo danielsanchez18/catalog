@@ -36,7 +36,7 @@ const formatPrice = (price: number) =>
       />
       <p class="absolute top-3 left-3 rounded-full w-fit bg-white px-3 py-1 text-xs font-mono font-medium z-10">
         <Tag className="inline size-3 mr-1" />
-        Publicado
+        {product.etiqueta === 'promocion' ? 'Promoción' : product.etiqueta === 'nuevo' ? 'Nuevo' : 'Publicado'}
       </p>
     </div>
   
@@ -47,7 +47,7 @@ const formatPrice = (price: number) =>
       </div>
   
       <p class="text-sm leading-relaxed text-neutral-800">
-        {product.descripcion}
+        {product.descripcion_larga}
       </p>
   
       <div class="border-t border-border pt-4">

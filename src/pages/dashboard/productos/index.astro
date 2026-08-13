@@ -2,7 +2,8 @@
 import Header from '@/components/dashboard/Header.astro';
 import Navlink from '@/components/dashboard/Navlink.astro';
 import Dashboard from '@/layouts/Dashboard.astro';
-import Greeting from '@/sections/dashboard/overview/Greeting.astro';
+import Title from '@/sections/dashboard/productos/Title.astro';
+import List from '@/sections/dashboard/List.astro';
 import Breadcrumb from '@/components/dashboard/Breadcrumb';
 ---
 
@@ -12,10 +13,11 @@ import Breadcrumb from '@/components/dashboard/Breadcrumb';
         <Navlink />
     </div>
     <div class="md:hidden">
-        <Breadcrumb current="Overview" client:load />
+        <Breadcrumb current="Productos" client:load />
     </div>
 
     <div class="w-full max-w-7xl mx-auto px-5 py-7 space-y-10">
-        <Greeting />
+        <Title />
+        <List />
     </div>
 </Dashboard>

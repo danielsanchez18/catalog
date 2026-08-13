@@ -42,6 +42,9 @@ Fuentes auto-alojadas con `@fontsource-variable` (variable fonts):
 | Componente | Ruta                          | Variantes                                             |
 | ---------- | ----------------------------- | ----------------------------------------------------- |
 | Button     | `src/components/ui/button.tsx`| default, secondary, destructive, outline, ghost, link |
+| Select     | `src/components/ui/select.tsx`| Base UI (v1.7, `items` en Root para etiquetas)        |
+| DropdownMenu | `src/components/ui/dropdown-menu.tsx` | Base UI Menu; `LinkItem` para items con `href` |
+| Toaster    | `src/components/ui/sonner.tsx`| Toasts (sonner) + helper `toast`; éxito/info/error     |
 
 - Tamaños del Button: `xs`, `sm`, `default`, `lg`, `icon`, `icon-xs`, `icon-sm`, `icon-lg`.
 - Los componentes son React y se usan como **islas** (sin `client:*` si son puramente visuales;

@@ -1,21 +1,39 @@
 ---
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+const currentPath = Astro.url.pathname;
+
+const items = [
+    { label: 'Overview', href: '/dashboard' },
+    { label: 'Productos', href: '/dashboard/productos' },
+    { label: 'Servicios', href: '/dashboard/servicios' },
+    { label: 'Clientes', href: '/dashboard/clientes' },
+];
 ---
 
 <nav class="w-full border-b border-border">
     <div class="w-full max-w-7xl mx-auto px-5 py-2 flex items-center gap-x-1">
-        <Button variant="ghost" className="h-fit py-1.5">
-            Overview
-        </Button>
-        <Button variant="ghost" className="h-fit py-1.5">
-            Productos
-        </Button>
-        <Button variant="ghost" className="h-fit py-1.5">
-            Servicios
-        </Button>
-        <Button variant="ghost" className="h-fit py-1.5">
-            Clientes
-        </Button>
-        
+        {
+            items.map((item) => {
+                const isActive =
+                    item.href === '/dashboard'
+                        ? currentPath === '/dashboard' || currentPath === '/dashboard/'
+                        : currentPath === item.href || currentPath.startsWith(item.href + '/');
+                return (
+                    <a href={item.href} aria-current={isActive ? 'page' : undefined}>
+                        <Button
+                            variant="ghost"
+                            className={cn(
+                                'h-fit py-1.5',
+                                isActive && 'bg-accent text-accent-foreground'
+                            )}
+                        >
+                            {item.label}
+                        </Button>
+                    </a>
+                );
+            })
+        }
     </div>
 </nav>

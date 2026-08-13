@@ -72,3 +72,7 @@ export function getServiceById(id: string): Service | undefined {
 export function getPublishedServices(): Service[] {
   return mockServices.filter((s) => s.estado === 'publicado');
 }
+
+export function getServices(): Service[] {
+  return mockServices;
+}

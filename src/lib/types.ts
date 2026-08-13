@@ -1,8 +1,15 @@
+export type ProductCategory = 'papeleria' | 'bisuteria' | 'cuidado_personal';
+
+export type ProductTag = 'nuevo' | 'promocion';
+
 export interface Product {
   id: string;
   nombre: string;
-  descripcion: string;
+  descripcion_corta: string;
+  descripcion_larga: string;
   precio: number;
+  categoria: ProductCategory;
+  etiqueta?: ProductTag;
   estado: 'borrador' | 'publicado';
   imagen_url?: string;
   created_at: string;

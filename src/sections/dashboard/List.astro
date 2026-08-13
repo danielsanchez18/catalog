@@ -1,0 +1,8 @@
+---
+import ProductTable from '@/components/dashboard/ProductTable';
+import { getProducts } from '@/lib/products';
+
+const products = getProducts();
+---
+
+<ProductTable products={products} client:load />

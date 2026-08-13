@@ -4,7 +4,8 @@ import Navbar from '@/components/Navbar.astro';
 import Footer from '@/components/Footer.astro';
 import Title from '@/sections/productos/Title.astro';
 import CategoriesBar from '@/components/CategoriesBar.astro';
-import ProductGrid from '@/components/ProductGrid.astro';
+import ProductGrid from '@/components/ProductGrid';
+import { getPublishedProducts } from '@/lib/products';
 ---
 
 <Layout>
@@ -12,7 +13,7 @@ import ProductGrid from '@/components/ProductGrid.astro';
 	<main class="w-full max-w-4xl mx-auto px-5 min-h-dvh py-10 space-y-10">
 		<Title />
 		<CategoriesBar />
-		<ProductGrid />
+		<ProductGrid products={getPublishedProducts()} />
 	</main>
 	<Footer />
 </Layout>

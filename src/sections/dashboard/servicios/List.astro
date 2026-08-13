@@ -1,0 +1,8 @@
+---
+import ServiceTable from '@/components/dashboard/ServiceTable';
+import { getServices } from '@/lib/services';
+
+const services = getServices();
+---
+
+<ServiceTable services={services} client:load />

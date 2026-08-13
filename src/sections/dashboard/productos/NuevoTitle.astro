@@ -1,0 +1,21 @@
+---
+import { Button } from '@/components/ui/button';
+import { createElement } from 'react';
+import { ArrowLeft } from 'lucide-react';
+---
+
+<div class="flex flex-col gap-y-3">
+    <Button
+        variant="link"
+        className="p-0 w-fit"
+        render={createElement('a', { href: '/dashboard/productos' })}
+    >
+        <ArrowLeft className="size-4" />
+        Volver a productos
+    </Button>
+
+    <div class="space-y-1">
+        <h1 class="text-lg font-medium font-sans">Agregar producto</h1>
+        <p class="text-sm text-neutral-800">Completa los datos del producto para añadirlo al catálogo.</p>
+    </div>
+</div>
