@@ -40,7 +40,7 @@ export default function ServiceDetail({ service }: Props) {
             <h1 className="text-3xl font-heading tracking-tighter font-medium">{service.nombre}</h1>
           </div>
 
-          <p className="text-neutral-800 text-sm leading-relaxed">{service.descripcion}</p>
+          <p className="text-neutral-800 text-sm leading-relaxed">{service.descripcion_larga}</p>
 
           <div className="border-t border-border pt-4">
             <p className="text-sm text-muted-foreground mb-1">Precio base desde</p>

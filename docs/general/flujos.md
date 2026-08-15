@@ -17,6 +17,12 @@ Estado: propuesto
 
 - `borrador`: visible solo en el dashboard.
 - `publicado`: visible en el catálogo público.
+- `eliminado`: borrado lógico; no visible en ningún lado (ver ADR-0003).
+
+## Ciclo de vida de un servicio
+
+Idéntico al de productos: `borrador` → `publicado` (visible en el catálogo), y `eliminado` como
+borrado lógico desde el dashboard.
 
 ## Flujos transversales
 
@@ -28,4 +34,5 @@ Estado: propuesto
 
 - Autenticación: `docs/auth/README.md`
 - Productos (CRUD y reglas): `docs/productos/README.md`
+- Servicios (CRUD y reglas): `docs/servicios/README.md`
 - Catálogo público: `docs/catalogo/README.md`

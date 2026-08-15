@@ -16,6 +16,7 @@ const formatDate = (date: string) =>
 
 const StatusBadge = ({ service }: { service: Service }) => {
   const published = service.estado === 'publicado';
+  const deleted = service.estado === 'eliminado';
   return (
     <span
       className={cn(
@@ -23,7 +24,7 @@ const StatusBadge = ({ service }: { service: Service }) => {
         published ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
       )}
     >
-      {published ? 'Publicado' : 'Borrador'}
+      {published ? 'Publicado' : deleted ? 'Eliminado' : 'Borrador'}
     </span>
   );
 };
@@ -54,9 +55,14 @@ export function ServiceTableRow({ service }: { service: Service }) {
             ) : null}
           </div>
           <div className="flex flex-col min-w-0">
-            <p className="text-sm font-medium truncate">{service.nombre}</p>
+            <a
+              href={`/dashboard/servicios/${service.id}`}
+              className="text-sm font-medium truncate hover:underline"
+            >
+              {service.nombre}
+            </a>
             <p className="text-sm text-muted-foreground truncate max-w-72">
-              {service.descripcion}
+              {service.descripcion_corta}
             </p>
           </div>
         </div>
@@ -96,14 +102,19 @@ export default function ServiceCard({ service }: { service: Service }) {
             ) : null}
           </div>
           <div className="flex flex-col min-w-0">
-            <p className="text-sm font-medium">{service.nombre}</p>
+            <a
+              href={`/dashboard/servicios/${service.id}`}
+              className="text-sm font-medium hover:underline"
+            >
+              {service.nombre}
+            </a>
             <p className="text-sm text-muted-foreground">{formatDate(service.created_at)}</p>
           </div>
         </div>
         <StatusBadge service={service} />
       </div>
 
-      <p className="text-sm text-muted-foreground line-clamp-2">{service.descripcion}</p>
+      <p className="text-sm text-muted-foreground line-clamp-2">{service.descripcion_corta}</p>
 
       <div className="flex items-center justify-between">
         <p className="text-lg font-mono font-medium">{formatPrice(service.precio_minimo)}</p>

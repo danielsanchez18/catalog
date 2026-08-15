@@ -41,6 +41,7 @@ La documentación está separada por módulo para no cargar contexto innecesario
 | Flujos generales de la aplicación        | `docs/general/flujos.md`                         |
 | Auth / login / rutas de administración   | `docs/auth/README.md`                            |
 | CRUD y reglas de negocio de productos    | `docs/productos/README.md`                       |
+| CRUD y reglas de negocio de servicios    | `docs/servicios/README.md`                       |
 | Catálogo público, detalle, búsqueda      | `docs/catalogo/README.md`                        |
 | Decidir algo técnicamente significativo  | `docs/adr/` (registrar decisión)                 |
 

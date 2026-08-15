@@ -12,7 +12,7 @@ Gestionar los productos que se muestran en el catálogo: crear, leer, editar, pu
 
 - CRUD completo desde la zona admin.
 - Validación de datos al crear/editar.
-- Estados de publicación (borrador / publicado).
+- Estados de publicación (borrador / publicado) y borrado lógico (eliminado).
 
 ### No incluye (por ahora)
 
@@ -27,7 +27,8 @@ Gestionar los productos que se muestran en el catálogo: crear, leer, editar, pu
 2. Campos obligatorios para **publicar**: `nombre`, `descripcion`, `precio`.
 3. `precio` debe ser **> 0** (moneda por confirmar).
 4. Solo el admin puede crear/editar/eliminar productos (ver `docs/auth/README.md`).
-5. Eliminar un producto lo quita del catálogo de forma definitiva.
+5. Eliminar un producto es un **borrado lógico**: pasa a estado `eliminado` y deja de mostrarse en el
+   catálogo, pero el registro se conserva (ver ADR-0003). La barra de acciones del detalle se oculta.
 
 ## Flujo de CRUD
 
@@ -45,7 +46,7 @@ Gestionar los productos que se muestran en el catálogo: crear, leer, editar, pu
 | nombre         | text        | Obligatorio                               |
 | descripcion    | text        | Obligatorio                               |
 | precio         | numeric     | > 0                                       |
-| estado         | text        | `borrador` \| `publicado`                 |
+| estado         | text        | `borrador` \| `publicado` \| `eliminado`  |
 | created_at     | timestamptz | default `now()`                           |
 | updated_at     | timestamptz | default `now()`                           |
 | (futuro) imagen_url | text   | Fase 3                                    |

@@ -30,13 +30,13 @@ const Toaster = ({ className, ...props }: ToasterProps) => (
         title: 'font-sans text-sm font-semibold',
         description: 'font-sans text-sm text-muted-foreground',
         icon: 'shrink-0 [&_svg]:size-4.5 mt-1',
-        content: 'min-w-0 flex-1 space-y-1',
+        content: 'min-w-0 flex-1',
       },
     }}
     icons={{
-      success: <BadgeCheck className="size-4 text-primary" />,
-      error: <CircleX className="size-4 text-destructive" />,
-      info: <BadgeInfo className="size-4 text-primary" />,
+      success: <BadgeCheck className="size-4 min-w-4 text-primary" />,
+      error: <CircleX className="size-4 min-w-4 text-destructive" />,
+      info: <BadgeInfo className="size-4 min-w-4 text-primary" />,
     }}
     style={toastStyle}
     {...props}

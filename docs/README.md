@@ -19,6 +19,7 @@ docs/
 │   └── flujos.md       # Flujos generales de la aplicación
 ├── auth/               # Módulo: autenticación y administración
 ├── productos/          # Módulo: gestión de productos (CRUD)
+├── servicios/          # Módulo: gestión de servicios (CRUD)
 ├── catalogo/           # Módulo: catálogo público
 └── adr/                # Decisiones de arquitectura (ADR)
 ```
@@ -34,6 +35,7 @@ docs/
 | Flujos de la aplicación       | `general/flujos.md`                          |
 | Autenticación (admin)         | `auth/README.md`                             |
 | Productos (CRUD y negocio)    | `productos/README.md`                        |
+| Servicios (CRUD y negocio)    | `servicios/README.md`                        |
 | Catálogo público              | `catalogo/README.md`                         |
 
 ## Estado de los módulos
@@ -43,6 +45,7 @@ docs/
 | General   | Definido (borrador)     |
 | Auth      | Mínimo, por implementar |
 | Productos | Por definir             |
+| Servicios | Por definir             |
 | Catálogo  | Por definir             |
 
 ## Reglas

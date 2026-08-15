@@ -6,7 +6,8 @@ export const mockServices: Service[] = [
   {
     id: '1',
     nombre: 'Eventos Corporativos',
-    descripcion: 'Organización integral de eventos empresariales. Desde reuniones ejecutivas hasta lanzamientos de producto, con atención al detalle en cada aspecto.',
+    descripcion_corta: 'Organización integral de eventos empresariales.',
+    descripcion_larga: 'Organización integral de eventos empresariales. Desde reuniones ejecutivas hasta lanzamientos de producto, con atención al detalle en cada aspecto.',
     precio_minimo: 5000.00,
     estado: 'publicado',
     imagen_url: PLACEHOLDER_IMG,
@@ -16,7 +17,8 @@ export const mockServices: Service[] = [
   {
     id: '2',
     nombre: 'Bodas y Quinceañeros',
-    descripcion: 'Diseño y coordinación de celebraciones especiales. Temáticas personalizadas, decoración floral y logística completa para días inolvidables.',
+    descripcion_corta: 'Diseño y coordinación de celebraciones especiales.',
+    descripcion_larga: 'Diseño y coordinación de celebraciones especiales. Temáticas personalizadas, decoración floral y logística completa para días inolvidables.',
     precio_minimo: 15000.00,
     estado: 'publicado',
     imagen_url: PLACEHOLDER_IMG,
@@ -26,7 +28,8 @@ export const mockServices: Service[] = [
   {
     id: '3',
     nombre: 'Arreglos Florales',
-    descripcion: 'Creación de arreglos para toda ocasión: centros de mesa, ramos, decoración de espacios. Flores frescas y diseños únicos.',
+    descripcion_corta: 'Creación de arreglos para toda ocasión.',
+    descripcion_larga: 'Creación de arreglos para toda ocasión: centros de mesa, ramos, decoración de espacios. Flores frescas y diseños únicos.',
     precio_minimo: 800.00,
     estado: 'publicado',
     imagen_url: PLACEHOLDER_IMG,
@@ -36,7 +39,8 @@ export const mockServices: Service[] = [
   {
     id: '4',
     nombre: 'Repostería Personalizada',
-    descripcion: 'Pasteles y postres diseñados a medida. Sabores artesanales, decoración temática y opciones para alérgicos.',
+    descripcion_corta: 'Pasteles y postres diseñados a medida.',
+    descripcion_larga: 'Pasteles y postres diseñados a medida. Sabores artesanales, decoración temática y opciones para alérgicos.',
     precio_minimo: 1200.00,
     estado: 'publicado',
     imagen_url: PLACEHOLDER_IMG,
@@ -46,7 +50,8 @@ export const mockServices: Service[] = [
   {
     id: '5',
     nombre: 'Decoración de Interiores',
-    descripcion: 'Asesoría y montaje de decoración para eventos y espacios. Ambientación, iluminación y mobiliario temático.',
+    descripcion_corta: 'Asesoría y montaje de decoración para eventos y espacios.',
+    descripcion_larga: 'Asesoría y montaje de decoración para eventos y espacios. Ambientación, iluminación y mobiliario temático.',
     precio_minimo: 3000.00,
     estado: 'publicado',
     imagen_url: PLACEHOLDER_IMG,
@@ -56,7 +61,8 @@ export const mockServices: Service[] = [
   {
     id: '6',
     nombre: 'Catering Gourmet',
-    descripcion: 'Servicio de comida para eventos con menús personalizados. Cocina de autor, presentación elegante y servicio profesional.',
+    descripcion_corta: 'Servicio de comida para eventos con menús personalizados.',
+    descripcion_larga: 'Servicio de comida para eventos con menús personalizados. Cocina de autor, presentación elegante y servicio profesional.',
     precio_minimo: 8000.00,
     estado: 'publicado',
     imagen_url: PLACEHOLDER_IMG,

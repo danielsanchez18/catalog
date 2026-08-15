@@ -1,0 +1,117 @@
+---
+import { Button } from '@/components/ui/button';
+import { createElement } from 'react';
+import { ArrowLeft, CalendarDays } from 'lucide-react';
+import DetailActions from '@/components/dashboard/product/DetailActions';
+import type { Product } from '@/lib/types';
+
+const { product } = Astro.props;
+
+const formatPrice = (price: number) =>
+    price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString('es-MX', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    });
+
+const categoryLabel: Record<Product['categoria'], string> = {
+    papeleria: 'Papelería',
+    bisuteria: 'Bisutería',
+    cuidado_personal: 'Cuidado Personal',
+};
+
+const tagLabel =
+    product.etiqueta === 'promocion'
+        ? 'Promoción'
+        : product.etiqueta === 'nuevo'
+          ? 'Nuevo'
+          : null;
+
+const meta = [
+    { label: 'Categoría', value: categoryLabel[product.categoria] },
+    ...(tagLabel ? [{ label: 'Etiqueta', value: tagLabel }] : []),
+    {
+        label: 'Estado',
+        value:
+            product.estado === 'publicado'
+                ? 'Publicado'
+                : product.estado === 'eliminado'
+                  ? 'Eliminado'
+                  : 'Borrador',
+    },
+];
+---
+
+<div class="flex flex-col gap-y-5">
+    <Button
+        variant="link"
+        className="w-fit p-0"
+        render={createElement('a', { href: '/dashboard/productos' })}
+    >
+        <ArrowLeft className="size-4" />
+        Volver a productos
+    </Button>
+
+    <article class="grid gap-6 lg:grid-cols-2">
+        <div class="relative overflow-hidden rounded-xl bg-accent min-h-72 lg:h-full">
+            {
+                product.imagen_url ? (
+                    <img
+                        src={product.imagen_url}
+                        alt={product.nombre}
+                        class="absolute inset-0 h-full w-full object-cover"
+                    />
+                ) : null
+            }
+        </div>
+
+        <div class="space-y-5">
+            <div class="space-y-1">
+                <p class="text-sm text-muted-foreground">Detalle del producto</p>
+                <h1 class="text-2xl tracking-tight font-medium font-sans">{product.nombre}</h1>
+            </div>
+
+            <dl class="grid grid-cols-2 gap-x-5 gap-y-4">
+                {
+                    meta.map((m) => (
+                        <div>
+                            <dt class="text-sm text-muted-foreground">{m.label}</dt>
+                            <dd class="text-sm font-medium">{m.value}</dd>
+                        </div>
+                    ))
+                }
+                <div>
+                    <dt class="text-sm text-muted-foreground">Precio</dt>
+                    <dd class="text-lg font-mono font-medium">{formatPrice(product.precio)}</dd>
+                </div>
+            </dl>
+
+            <div class="border-t border-border pt-4 space-y-4">
+                <div class="space-y-1">
+                    <p class="text-sm text-muted-foreground">Descripción corta</p>
+                    <p class="text-sm">{product.descripcion_corta}</p>
+                </div>
+
+                <div class="space-y-1">
+                    <p class="text-sm text-muted-foreground">Descripción larga</p>
+                    <p class="text-sm leading-relaxed">{product.descripcion_larga}</p>
+                </div>
+            </div>
+
+            <div class="flex items-center flex-wrap gap-x-3 border-t border-border pt-4 text-sm text-muted-foreground">
+                <span class="inline-flex items-center gap-x-1">
+                    <CalendarDays className="size-3.5" />
+                    Creado el {formatDate(product.created_at)}
+                </span>
+                <span aria-hidden>·</span>
+                <span>Actualizado el {formatDate(product.updated_at)}</span>
+            </div>
+        </div>
+    </article>
+</div>
+
+<DetailActions product={product} client:load />
+

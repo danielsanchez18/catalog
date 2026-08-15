@@ -1,0 +1,31 @@
+---
+import Header from '@/components/dashboard/Header.astro';
+import Navlink from '@/components/dashboard/Navlink.astro';
+import Dashboard from '@/layouts/Dashboard.astro';
+import Breadcrumb from '@/components/dashboard/Breadcrumb';
+import Detail from '@/sections/dashboard/servicios/Detail.astro';
+import { getServices } from '@/lib/services';
+
+export function getStaticPaths() {
+    return getServices().map((service) => ({
+        params: { id: service.id },
+        props: { service },
+    }));
+}
+
+const { service } = Astro.props;
+---
+
+<Dashboard>
+    <Header />
+    <div class="max-md:hidden">
+        <Navlink />
+    </div>
+    <div class="md:hidden">
+        <Breadcrumb current={service.nombre} client:load />
+    </div>
+
+    <div class="w-full max-w-7xl mx-auto px-5 py-7 space-y-10">
+        <Detail service={service} />
+    </div>
+</Dashboard>

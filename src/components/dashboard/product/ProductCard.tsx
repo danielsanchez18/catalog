@@ -54,7 +54,12 @@ export function ProductTableRow({ product }: { product: Product }) {
             ) : null}
           </div>
           <div className="flex flex-col min-w-0">
-            <p className="text-sm font-medium truncate">{product.nombre}</p>
+            <a
+              href={`/dashboard/productos/${product.id}`}
+              className="text-sm font-medium truncate hover:underline"
+            >
+              {product.nombre}
+            </a>
             <p className="text-sm text-muted-foreground truncate max-w-72">
               {product.descripcion_corta}
             </p>
@@ -94,7 +99,12 @@ export default function ProductCard({ product }: { product: Product }) {
             ) : null}
           </div>
           <div className="flex flex-col min-w-0">
-            <p className="text-sm font-medium">{product.nombre}</p>
+            <a
+              href={`/dashboard/productos/${product.id}`}
+              className="text-sm font-medium hover:underline"
+            >
+              {product.nombre}
+            </a>
             <p className="text-sm text-muted-foreground">{formatDate(product.created_at)}</p>
           </div>
         </div>

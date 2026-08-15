@@ -1,0 +1,92 @@
+---
+import { Button } from '@/components/ui/button';
+import { createElement } from 'react';
+import { ArrowLeft, CalendarDays } from 'lucide-react';
+import ServiceActions from '@/components/dashboard/service/ServiceActions';
+import type { Service } from '@/lib/types';
+
+const { service } = Astro.props;
+
+const formatPrice = (price: number) =>
+    price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString('es-MX', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    });
+
+const estadoLabel =
+    service.estado === 'publicado'
+        ? 'Publicado'
+        : service.estado === 'eliminado'
+          ? 'Eliminado'
+          : 'Borrador';
+---
+
+<div class="flex flex-col gap-y-5">
+    <Button
+        variant="link"
+        className="w-fit p-0"
+        render={createElement('a', { href: '/dashboard/servicios' })}
+    >
+        <ArrowLeft className="size-4" />
+        Volver a servicios
+    </Button>
+
+    <article class="grid gap-6 lg:grid-cols-2">
+        <div class="relative overflow-hidden rounded-xl bg-accent min-h-72 lg:h-full">
+            {
+                service.imagen_url ? (
+                    <img
+                        src={service.imagen_url}
+                        alt={service.nombre}
+                        class="absolute inset-0 h-full w-full object-cover"
+                    />
+                ) : null
+            }
+        </div>
+
+        <div class="space-y-5">
+            <div class="space-y-1">
+                <p class="text-sm text-muted-foreground">Detalle del servicio</p>
+                <h1 class="text-2xl tracking-tight font-medium font-sans">{service.nombre}</h1>
+            </div>
+
+            <dl class="grid grid-cols-2 gap-x-5 gap-y-4">
+                <div>
+                    <dt class="text-sm text-muted-foreground">Estado</dt>
+                    <dd class="text-sm font-medium">{estadoLabel}</dd>
+                </div>
+                <div>
+                    <dt class="text-sm text-muted-foreground">Precio desde</dt>
+                    <dd class="text-lg font-mono font-medium">{formatPrice(service.precio_minimo)}</dd>
+                </div>
+            </dl>
+
+            <div class="border-t border-border pt-4 space-y-4">
+                <div class="space-y-1">
+                    <p class="text-xs text-muted-foreground">Descripción corta</p>
+                    <p class="text-sm">{service.descripcion_corta}</p>
+                </div>
+
+                <div class="space-y-1">
+                    <p class="text-xs text-muted-foreground">Descripción larga</p>
+                    <p class="text-sm leading-relaxed">{service.descripcion_larga}</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-x-3 border-t border-border pt-4 text-sm text-muted-foreground">
+                <span class="inline-flex items-center gap-x-1">
+                    <CalendarDays className="size-3.5" />
+                    Creado el {formatDate(service.created_at)}
+                </span>
+                <span aria-hidden>·</span>
+                <span>Actualizado el {formatDate(service.updated_at)}</span>
+            </div>
+        </div>
+    </article>
+</div>
+
+<ServiceActions service={service} client:load />

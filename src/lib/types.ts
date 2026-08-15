@@ -10,7 +10,7 @@ export interface Product {
   precio: number;
   categoria: ProductCategory;
   etiqueta?: ProductTag;
-  estado: 'borrador' | 'publicado';
+  estado: 'borrador' | 'publicado' | 'eliminado';
   imagen_url?: string;
   created_at: string;
   updated_at: string;
@@ -19,9 +19,10 @@ export interface Product {
 export interface Service {
   id: string;
   nombre: string;
-  descripcion: string;
+  descripcion_corta: string;
+  descripcion_larga: string;
   precio_minimo: number;
-  estado: 'borrador' | 'publicado';
+  estado: 'borrador' | 'publicado' | 'eliminado';
   imagen_url?: string;
   created_at: string;
   updated_at: string;

@@ -36,7 +36,8 @@ export default function ServiceTable({
     return services.filter(
       (s) =>
         s.nombre.toLowerCase().includes(q) ||
-        s.descripcion.toLowerCase().includes(q)
+        s.descripcion_corta.toLowerCase().includes(q) ||
+        s.descripcion_larga.toLowerCase().includes(q)
     );
   }, [services, query]);
 

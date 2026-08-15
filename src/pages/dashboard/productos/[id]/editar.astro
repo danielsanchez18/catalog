@@ -1,0 +1,33 @@
+---
+import Header from '@/components/dashboard/Header.astro';
+import Navlink from '@/components/dashboard/Navlink.astro';
+import Dashboard from '@/layouts/Dashboard.astro';
+import Breadcrumb from '@/components/dashboard/Breadcrumb';
+import Title from '@/sections/dashboard/productos/EditarTitle.astro';
+import ProductForm from '@/components/dashboard/product/ProductForm';
+import { getProducts } from '@/lib/products';
+
+export function getStaticPaths() {
+    return getProducts().map((product) => ({
+        params: { id: product.id },
+        props: { product },
+    }));
+}
+
+const { product } = Astro.props;
+---
+
+<Dashboard>
+    <Header />
+    <div class="max-md:hidden">
+        <Navlink />
+    </div>
+    <div class="md:hidden">
+        <Breadcrumb current="Editar producto" client:load />
+    </div>
+
+    <div class="w-full max-w-7xl mx-auto px-5 py-7 space-y-10">
+        <Title nombre={product.nombre} />
+        <ProductForm product={product} client:load />
+    </div>
+</Dashboard>

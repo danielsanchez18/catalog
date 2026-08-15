@@ -12,23 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/sonner';
-import type { Product, ProductCategory, ProductTag } from '@/lib/types';
-
-const CATEGORIES = [
-  { label: 'Papelería', value: 'papeleria' },
-  { label: 'Bisutería', value: 'bisuteria' },
-  { label: 'Cuidado Personal', value: 'cuidado_personal' },
-] as const;
-
-const TAGS = [
-  { label: 'Nuevo', value: 'nuevo' },
-  { label: 'Promoción', value: 'promocion' },
-] as const;
-
-const ETIQUETA_ITEMS = [
-  { label: 'Sin etiqueta', value: 'sin_etiqueta' },
-  ...TAGS,
-];
+import type { Service } from '@/lib/types';
 
 const ESTADO_ITEMS = [
   { label: 'Borrador', value: 'borrador' },
@@ -41,9 +25,7 @@ interface FormState {
   nombre: string;
   descripcion_corta: string;
   descripcion_larga: string;
-  precio: string;
-  categoria: ProductCategory;
-  etiqueta: ProductTag | null;
+  precio_minimo: string;
   estado: 'borrador' | 'publicado';
   imagen_url: string;
 }
@@ -52,9 +34,7 @@ const EMPTY_FORM: FormState = {
   nombre: '',
   descripcion_corta: '',
   descripcion_larga: '',
-  precio: '',
-  categoria: 'papeleria',
-  etiqueta: null,
+  precio_minimo: '',
   estado: 'borrador',
   imagen_url: '',
 };
@@ -64,28 +44,26 @@ type FormErrors = Partial<Record<keyof FormState, string>>;
 const formatPrice = (price: number) =>
   price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
-const toFormState = (product: Product): FormState => ({
-  nombre: product.nombre,
-  descripcion_corta: product.descripcion_corta,
-  descripcion_larga: product.descripcion_larga,
-  precio: String(product.precio),
-  categoria: product.categoria,
-  etiqueta: product.etiqueta ?? null,
-  estado: product.estado === 'publicado' ? 'publicado' : 'borrador',
-  imagen_url: product.imagen_url ?? '',
+const toFormState = (service: Service): FormState => ({
+  nombre: service.nombre,
+  descripcion_corta: service.descripcion_corta,
+  descripcion_larga: service.descripcion_larga,
+  precio_minimo: String(service.precio_minimo),
+  estado: service.estado === 'publicado' ? 'publicado' : 'borrador',
+  imagen_url: service.imagen_url ?? '',
 });
 
 interface Props {
-  product?: Product;
+  service?: Service;
 }
 
-export default function ProductForm({ product }: Props) {
-  const productId = product?.id;
-  const existing = product;
-  const [form, setForm] = useState<FormState>(product ? toFormState(product) : { ...EMPTY_FORM });
+export default function ServiceForm({ service }: Props) {
+  const serviceId = service?.id;
+  const existing = service;
+  const [form, setForm] = useState<FormState>(service ? toFormState(service) : { ...EMPTY_FORM });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [saved, setSaved] = useState<Product[]>([]);
-  const [imagePreview, setImagePreview] = useState<string | null>(product?.imagen_url ?? null);
+  const [saved, setSaved] = useState<Service[]>([]);
+  const [imagePreview, setImagePreview] = useState<string | null>(service?.imagen_url ?? null);
   const [imageError, setImageError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -133,11 +111,11 @@ export default function ProductForm({ product }: Props) {
     if (!form.descripcion_corta.trim()) {
       next.descripcion_corta = 'La descripción corta es obligatoria.';
     }
-    const price = Number(form.precio);
-    if (form.precio.trim() === '') {
-      next.precio = 'El precio es obligatorio.';
+    const price = Number(form.precio_minimo);
+    if (form.precio_minimo.trim() === '') {
+      next.precio_minimo = 'El precio mínimo es obligatorio.';
     } else if (!Number.isFinite(price) || price <= 0) {
-      next.precio = 'El precio debe ser mayor a 0.';
+      next.precio_minimo = 'El precio mínimo debe ser mayor a 0.';
     }
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -146,77 +124,53 @@ export default function ProductForm({ product }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
-      toast.error('No se pudo guardar el producto', {
+      toast.error('No se pudo guardar el servicio', {
         description:
-          'Revisa los campos marcados: nombre, descripción corta y precio son obligatorios, y el precio debe ser mayor a 0.',
+          'Revisa los campos marcados: nombre, descripción corta y precio mínimo son obligatorios, y el precio debe ser mayor a 0.',
       });
       return;
     }
     const now = new Date().toISOString();
-    const product: Product = {
-      id: productId,
+    const newService: Service = {
+      id: serviceId ?? crypto.randomUUID(),
       nombre: form.nombre.trim(),
       descripcion_corta: form.descripcion_corta.trim(),
       descripcion_larga: form.descripcion_larga.trim(),
-      precio: Number(form.precio),
-      categoria: form.categoria,
-      etiqueta: form.etiqueta ?? undefined,
+      precio_minimo: Number(form.precio_minimo),
       estado: form.estado,
       imagen_url: form.imagen_url.trim() || undefined,
-      created_at: productId ? existing?.created_at ?? now : now,
+      created_at: serviceId ? existing?.created_at ?? now : now,
       updated_at: now,
     };
-    setSaved((list) => [product, ...list]);
+    setSaved((list) => [newService, ...list]);
     setForm({ ...EMPTY_FORM });
-    if (productId) {
-      toast.success('Producto actualizado', {
-        description: `«${product.nombre}» se guardó correctamente.`,
+    if (serviceId) {
+      toast.success('Servicio actualizado', {
+        description: `«${newService.nombre}» se guardó correctamente.`,
       });
-    } else if (product.estado === 'publicado') {
-      toast.success('Producto publicado', {
-        description: `«${product.nombre}» se agregó al catálogo con un precio de ${formatPrice(product.precio)}. Ya es visible para los clientes.`,
+    } else if (newService.estado === 'publicado') {
+      toast.success('Servicio publicado', {
+        description: `«${newService.nombre}» se agregó al catálogo con un precio desde ${formatPrice(newService.precio_minimo)}. Ya es visible para los clientes.`,
       });
     } else {
-      toast.info('Producto guardado como borrador', {
-        description: `«${product.nombre}» no se mostrará en el catálogo hasta que lo publiques desde el panel.`,
+      toast.info('Servicio guardado como borrador', {
+        description: `«${newService.nombre}» no se mostrará en el catálogo hasta que lo publiques desde el panel.`,
       });
     }
   };
 
   return (
     <form onSubmit={handleSubmit} noValidate className="sm:p-5 sm:rounded-xl sm:border border-border space-y-5">
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="nombre">Nombre</Label>
-          <Input
-            id="nombre"
-            value={form.nombre}
-            onChange={(e) => setField('nombre', e.target.value)}
-            placeholder="Ej. Cuaderno Artesanal"
-            aria-invalid={!!errors.nombre}
-          />
-          {errors.nombre ? <p className="text-xs text-destructive">{errors.nombre}</p> : null}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="categoria">Categoría</Label>
-          <Select
-            items={CATEGORIES}
-            value={form.categoria}
-            onValueChange={(v) => setField('categoria', v as ProductCategory)}
-          >
-            <SelectTrigger id="categoria">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {CATEGORIES.map((c) => (
-                <SelectItem key={c.value} value={c.value}>
-                  {c.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="nombre">Nombre</Label>
+        <Input
+          id="nombre"
+          value={form.nombre}
+          onChange={(e) => setField('nombre', e.target.value)}
+          placeholder="Ej. Eventos Corporativos"
+          aria-invalid={!!errors.nombre}
+        />
+        {errors.nombre ? <p className="text-xs text-destructive">{errors.nombre}</p> : null}
       </div>
 
       <div className="space-y-2">
@@ -240,47 +194,26 @@ export default function ProductForm({ product }: Props) {
           rows={4}
           value={form.descripcion_larga}
           onChange={(e) => setField('descripcion_larga', e.target.value)}
-          placeholder="Detalle completo que se muestra en la página del producto."
+          placeholder="Detalle completo del servicio que se muestra en el catálogo."
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="precio">Precio (MXN)</Label>
+          <Label htmlFor="precio_minimo">Precio mínimo (MXN)</Label>
           <Input
-            id="precio"
+            id="precio_minimo"
             type="number"
             min="0"
             step="0.01"
-            value={form.precio}
-            onChange={(e) => setField('precio', e.target.value)}
+            value={form.precio_minimo}
+            onChange={(e) => setField('precio_minimo', e.target.value)}
             placeholder="0.00"
-            aria-invalid={!!errors.precio}
+            aria-invalid={!!errors.precio_minimo}
           />
-          {errors.precio ? <p className="text-xs text-destructive">{errors.precio}</p> : null}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="etiqueta">Etiqueta</Label>
-          <Select
-            items={ETIQUETA_ITEMS}
-            value={form.etiqueta ?? 'sin_etiqueta'}
-            onValueChange={(v) =>
-              setField('etiqueta', v === 'sin_etiqueta' ? null : (v as ProductTag))
-            }
-          >
-            <SelectTrigger id="etiqueta">
-              <SelectValue placeholder="Sin etiqueta" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="sin_etiqueta">Sin etiqueta</SelectItem>
-              {TAGS.map((t) => (
-                <SelectItem key={t.value} value={t.value}>
-                  {t.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {errors.precio_minimo ? (
+            <p className="text-xs text-destructive">{errors.precio_minimo}</p>
+          ) : null}
         </div>
 
         <div className="space-y-2">
@@ -302,12 +235,12 @@ export default function ProductForm({ product }: Props) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="imagen">Imagen del producto</Label>
+        <Label htmlFor="imagen">Imagen del servicio</Label>
         {imagePreview ? (
           <div className="relative w-fit">
             <img
               src={imagePreview}
-              alt="Vista previa de la imagen del producto"
+              alt="Vista previa de la imagen del servicio"
               className="h-40 w-40 rounded-xl border border-border object-cover"
             />
             <Button
@@ -354,28 +287,28 @@ export default function ProductForm({ product }: Props) {
           variant="outline"
           className="rounded-full px-3 py-1.5 h-fit"
           nativeButton={false}
-          render={<a href={productId ? `/dashboard/productos/${productId}` : '/dashboard/productos'} />}
+          render={<a href={serviceId ? `/dashboard/servicios/${serviceId}` : '/dashboard/servicios'} />}
         >
           Cancelar
         </Button>
         <Button type="submit" className="rounded-full px-3 py-1.5 h-fit">
-          {productId ? 'Guardar cambios' : 'Guardar producto'}
+          {serviceId ? 'Guardar cambios' : 'Guardar servicio'}
         </Button>
       </div>
 
       {saved.length > 0 ? (
         <div className="border-t border-border pt-4 space-y-3">
           <p className="text-sm font-medium">
-            Productos agregados en esta sesión ({saved.length})
+            Servicios agregados en esta sesión ({saved.length})
           </p>
           <ul className="space-y-2">
-            {saved.map((p) => (
+            {saved.map((s) => (
               <li
-                key={p.id}
+                key={s.id}
                 className="flex items-center justify-between gap-x-3 text-sm border border-border rounded-lg px-3 py-2"
               >
-                <span className="font-medium truncate">{p.nombre}</span>
-                <span className="font-mono whitespace-nowrap">{formatPrice(p.precio)}</span>
+                <span className="font-medium truncate">{s.nombre}</span>
+                <span className="font-mono whitespace-nowrap">{formatPrice(s.precio_minimo)}</span>
               </li>
             ))}
           </ul>

@@ -22,7 +22,7 @@ export default function ServiceCard({ service }: Props) {
 
       <div className="flex flex-col gap-y-1 px-1 py-2 mt-2 h-full">
         <h3 className="font-medium line-clamp-2 font-sans">{service.nombre}</h3>
-        <p className="text-sm text-neutral-800 line-clamp-3 mb-2">{service.descripcion}</p>
+        <p className="text-sm text-neutral-800 line-clamp-3 mb-2">{service.descripcion_corta}</p>
         <Button
           className="mt-auto rounded-full h-fit py-1.75 self-start w-full"
           render={<a href={`/servicio/${service.id}`} />}
