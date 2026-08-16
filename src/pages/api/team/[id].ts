@@ -24,6 +24,7 @@ export const PATCH: APIRoute = async ({ request, cookies, params }) => {
   const email = typeof body?.email === 'string' ? body.email.trim() : '';
   const full_name = typeof body?.full_name === 'string' ? body.full_name.trim() : '';
   const password = typeof body?.password === 'string' ? body.password : '';
+  const avatar_url = typeof body?.avatar_url === 'string' ? body.avatar_url.trim() : '';
 
   if (!email) {
     return new Response(JSON.stringify({ error: 'El correo es obligatorio.' }), {
@@ -36,6 +37,7 @@ export const PATCH: APIRoute = async ({ request, cookies, params }) => {
       email,
       full_name: full_name || undefined,
       password: password || undefined,
+      avatar_url: avatar_url || undefined,
     });
 
     return new Response(JSON.stringify(member), {

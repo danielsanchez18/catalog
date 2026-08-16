@@ -15,11 +15,18 @@ const getInitials = (member: TeamMember) => {
   return parts.length > 1 ? parts[0][0] + parts[1][0] : name.slice(0, 2);
 };
 
-const Avatar = ({ member }: { member: TeamMember }) => (
-  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-medium text-primary uppercase">
-    {getInitials(member)}
-  </div>
-);
+const Avatar = ({ member }: { member: TeamMember }) =>
+  member.avatar_url ? (
+    <img
+      src={member.avatar_url}
+      alt={member.full_name ?? member.email}
+      className="size-10 shrink-0 rounded-full object-cover"
+    />
+  ) : (
+    <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-medium text-primary uppercase">
+      {getInitials(member)}
+    </div>
+  );
 
 export function TeamTableRow({ member }: { member: TeamMember }) {
   return (

@@ -1,20 +1,25 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { Camera, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/sonner';
 import type { TeamMember } from '@/lib/types';
 
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+
 interface FormState {
   full_name: string;
   email: string;
   password: string;
+  avatar_url: string;
 }
 
 const EMPTY_FORM: FormState = {
   full_name: '',
   email: '',
   password: '',
+  avatar_url: '',
 };
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
@@ -23,7 +28,13 @@ const toFormState = (member: TeamMember): FormState => ({
   full_name: member.full_name ?? '',
   email: member.email,
   password: '',
+  avatar_url: member.avatar_url ?? '',
 });
+
+const getInitials = (name: string) => {
+  const parts = name.split(' ').filter(Boolean);
+  return parts.length > 1 ? parts[0][0] + parts[1][0] : name.slice(0, 2);
+};
 
 interface Props {
   member?: TeamMember;
@@ -37,10 +48,48 @@ export default function TeamForm({ member, onSuccess, onCancel, embedded }: Prop
   const [form, setForm] = useState<FormState>(member ? toFormState(member) : { ...EMPTY_FORM });
   const [errors, setErrors] = useState<FormErrors>({});
   const [saving, setSaving] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(
+    member?.avatar_url ?? null
+  );
+  const [avatarError, setAvatarError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
     setErrors((e) => ({ ...e, [key]: undefined }));
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      setAvatarError('La foto supera el límite de 2 MB.');
+      setAvatarPreview(null);
+      setField('avatar_url', '');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result);
+      setAvatarPreview(dataUrl);
+      setAvatarError(null);
+      setField('avatar_url', dataUrl);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveAvatar = () => {
+    setAvatarPreview(null);
+    setAvatarError(null);
+    setField('avatar_url', '');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const validate = (): boolean => {
@@ -73,6 +122,7 @@ export default function TeamForm({ member, onSuccess, onCancel, embedded }: Prop
       full_name: form.full_name.trim(),
       email: form.email.trim(),
       password: form.password.trim(),
+      avatar_url: form.avatar_url.trim() || undefined,
     };
 
     setSaving(true);
@@ -121,6 +171,63 @@ export default function TeamForm({ member, onSuccess, onCancel, embedded }: Prop
       noValidate
       className={embedded ? 'space-y-5' : 'sm:p-5 sm:rounded-xl sm:border border-border space-y-5'}
     >
+      <div className="flex items-center gap-x-4">
+        <div className="relative shrink-0">
+          {avatarPreview ? (
+            <img
+              src={avatarPreview}
+              alt="Vista previa de la foto del miembro"
+              className="size-20 rounded-full border border-border object-cover"
+            />
+          ) : (
+            <div className="flex size-20 items-center justify-center rounded-full bg-primary/10 text-lg font-medium text-primary uppercase">
+              {getInitials(form.full_name || member?.email || '?')}
+            </div>
+          )}
+          {avatarPreview ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="absolute -right-1 -top-1 size-6 rounded-full"
+              onClick={handleRemoveAvatar}
+              aria-label="Quitar foto"
+            >
+              <X className="size-3" />
+            </Button>
+          ) : null}
+        </div>
+
+        <div className="space-y-1">
+          <Label htmlFor="avatar">Foto de perfil</Label>
+          <p className="text-xs text-muted-foreground">
+            {memberId ? 'Puedes cambiar la foto del miembro.' : 'Se mostrará junto al nombre.'}
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="rounded-full"
+            nativeButton={false}
+            render={<label htmlFor="avatar" className="inline-flex cursor-pointer items-center gap-x-1.5" />}
+          >
+            <Camera className="size-3.5" />
+            {avatarPreview ? 'Cambiar foto' : 'Subir foto'}
+          </Button>
+          <input
+            ref={fileInputRef}
+            id="avatar"
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={handleAvatarChange}
+            className="sr-only"
+          />
+          {avatarError ? (
+            <p className="text-xs text-destructive">{avatarError}</p>
+          ) : null}
+        </div>
+      </div>
+
       <div className="space-y-2">
         <Label htmlFor="full_name">Nombre</Label>
         <Input

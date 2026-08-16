@@ -1,6 +1,10 @@
 ---
 import { Button } from '@/components/ui/button';
 import { Bell } from 'lucide-react';
+import UserMenu from '@/components/dashboard/UserMenu';
+import { getCurrentTeamMember } from '@/lib/db/team';
+
+const member = await getCurrentTeamMember(Astro.cookies);
 ---
 
 <header class="w-full border-b border-border">
@@ -8,7 +12,6 @@ import { Bell } from 'lucide-react';
 
         <div class="flex items-center gap-x-1">
             <img src="/favicon.svg" alt="Logo" class="h-7 w-auto invert" />
-            <!-- <h1 class="font-display uppercase">Dashboard</h1> -->
         </div>
 
         <div class="flex items-center gap-x-2">
@@ -17,19 +20,7 @@ import { Bell } from 'lucide-react';
                 size="icon">
                 <Bell />
             </Button>
-            <form action="/api/auth/logout" method="POST">
-                <Button
-                    type="submit"
-                    variant="ghost"
-                    size="icon-lg"
-                    className="rounded-full overflow-hidden">
-                    <img 
-                        src="https://avatars.githubusercontent.com/u/148911330?v=4" 
-                        alt="" 
-                        class="h-full w-full object-cover" 
-                    />
-                </Button>
-            </form>
+            {member ? <UserMenu member={member} client:load /> : null}
         </div>
 
     </div>

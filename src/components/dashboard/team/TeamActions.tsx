@@ -56,9 +56,17 @@ function TeamViewDialog({ member }: Props) {
 
         <div className="max-h-[60dvh] overflow-y-auto px-5 pb-5">
           <div className="flex flex-col items-center gap-y-2 text-center">
-            <div className="flex size-24 items-center justify-center rounded-full bg-primary/10 text-2xl font-medium text-primary uppercase">
-              {getInitials(member)}
-            </div>
+            {member.avatar_url ? (
+              <img
+                src={member.avatar_url}
+                alt={member.full_name ?? member.email}
+                className="size-24 rounded-full border border-border object-cover"
+              />
+            ) : (
+              <div className="flex size-24 items-center justify-center rounded-full bg-primary/10 text-2xl font-medium text-primary uppercase">
+                {getInitials(member)}
+              </div>
+            )}
             <div className="space-y-1">
               <p className="text-lg font-medium leading-tight font-sans">
                 {member.full_name ?? 'Sin nombre'}

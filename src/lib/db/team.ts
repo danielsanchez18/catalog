@@ -7,9 +7,10 @@ export interface TeamMemberInput {
   email: string;
   full_name?: string;
   password?: string;
+  avatar_url?: string;
 }
 
-const SELECT = 'user_id, email, full_name, created_at';
+const SELECT = 'user_id, email, full_name, avatar_url, created_at';
 
 export async function isTeamMember(
   cookies: Pick<AstroCookies, 'get' | 'set' | 'delete'>,
@@ -48,8 +49,34 @@ function mapRow(row: Record<string, unknown>): TeamMember {
     id: row.user_id as string,
     email: row.email as string,
     full_name: (row.full_name as string | null) ?? undefined,
+    avatar_url: (row.avatar_url as string | null) ?? undefined,
     created_at: row.created_at as string,
   };
+}
+
+export async function getCurrentTeamMember(
+  cookies: Pick<AstroCookies, 'get' | 'set' | 'delete'>
+): Promise<TeamMember | null> {
+  const supabase = createServerClient(cookies);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from('team')
+    .select(SELECT)
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  if (error) {
+    return null;
+  }
+
+  return data ? mapRow(data) : null;
 }
 
 export async function getTeamMembers(): Promise<TeamMember[]> {
@@ -91,6 +118,7 @@ export async function createTeamMember(input: TeamMemberInput): Promise<TeamMemb
       user_id: userId,
       email: input.email,
       full_name: input.full_name ?? null,
+      avatar_url: input.avatar_url ?? null,
     })
     .select(SELECT)
     .single();
@@ -123,6 +151,7 @@ export async function updateTeamMember(
     .update({
       email: input.email,
       full_name: input.full_name ?? null,
+      avatar_url: input.avatar_url ?? null,
     })
     .eq('user_id', id)
     .select(SELECT)

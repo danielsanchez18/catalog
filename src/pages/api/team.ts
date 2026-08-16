@@ -40,6 +40,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const email = typeof body?.email === 'string' ? body.email.trim() : '';
   const full_name = typeof body?.full_name === 'string' ? body.full_name.trim() : '';
   const password = typeof body?.password === 'string' ? body.password : '';
+  const avatar_url = typeof body?.avatar_url === 'string' ? body.avatar_url.trim() : '';
 
   if (!email || !password) {
     return new Response(
@@ -53,6 +54,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       email,
       full_name: full_name || undefined,
       password,
+      avatar_url: avatar_url || undefined,
     });
 
     return new Response(JSON.stringify(member), {
