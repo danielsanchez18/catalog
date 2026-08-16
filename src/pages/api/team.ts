@@ -1,8 +1,29 @@
 import type { APIRoute } from 'astro';
 import { createClient } from '@/lib/supabase/server';
-import { createTeamMember } from '@/lib/db/team';
+import { createTeamMember, getTeamMembers } from '@/lib/db/team';
 
 export const prerender = false;
+
+export const GET: APIRoute = async ({ cookies }) => {
+  const supabase = createClient(cookies);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return new Response(JSON.stringify({ error: 'No autorizado.' }), { status: 401 });
+  }
+
+  try {
+    const members = await getTeamMembers();
+    return new Response(JSON.stringify(members), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: (e as Error).message }), { status: 500 });
+  }
+};
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   const supabase = createClient(cookies);

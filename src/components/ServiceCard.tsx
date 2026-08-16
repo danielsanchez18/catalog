@@ -10,11 +10,13 @@ export default function ServiceCard({ service }: Props) {
   return (
     <div className="border border-border rounded-lg p-3 group hover:bg-accent transition text-start flex flex-col">
       <div className="relative overflow-hidden rounded-md bg-accent h-60 min-h-60">
-        <img
-          src={service.imagen_url}
-          alt={service.nombre}
-          className="absolute top-0 left-0 w-full h-full z-10 group-hover:scale-105 transition duration-300"
-        />
+        {service.imagen_url ? (
+          <img
+            src={service.imagen_url}
+            alt={service.nombre}
+            className="absolute top-0 left-0 w-full h-full z-10 group-hover:scale-105 transition duration-300"
+          />
+        ) : null}
         <p className="absolute top-3 left-3 rounded-full w-fit bg-white px-3 py-1 text-xs font-mono font-medium z-20">
           Tag
         </p>

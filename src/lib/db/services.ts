@@ -61,6 +61,40 @@ export async function getServiceById(
   return data ? mapRow(data) : null;
 }
 
+export async function getPublishedServices(cookies: AstroCookies): Promise<Service[]> {
+  const supabase = createClient(cookies);
+  const { data, error } = await supabase
+    .from('servicios')
+    .select(SELECT)
+    .eq('estado', 'publicado')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []).map(mapRow);
+}
+
+export async function getPublishedServiceById(
+  cookies: AstroCookies,
+  id: string
+): Promise<Service | null> {
+  const supabase = createClient(cookies);
+  const { data, error } = await supabase
+    .from('servicios')
+    .select(SELECT)
+    .eq('id', id)
+    .eq('estado', 'publicado')
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ? mapRow(data) : null;
+}
+
 export async function createService(
   cookies: AstroCookies,
   input: ServiceInput

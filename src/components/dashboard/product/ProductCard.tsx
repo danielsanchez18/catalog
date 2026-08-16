@@ -1,6 +1,5 @@
-import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
+import ProductActions from '@/components/dashboard/product/ProductActions';
 import type { Product } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { formatPrice } from '@/lib/format';
@@ -25,17 +24,6 @@ const StatusBadge = ({ product }: { product: Product }) => {
     </span>
   );
 };
-
-const Actions = () => (
-  <div className="flex items-center justify-end gap-x-1">
-    <Button variant="ghost" size="icon" title="Editar">
-      <Pencil className="size-4" />
-    </Button>
-    <Button variant="ghost" size="icon" title="Eliminar">
-      <Trash2 className="size-4" />
-    </Button>
-  </div>
-);
 
 export function ProductTableRow({ product }: { product: Product }) {
   return (
@@ -76,7 +64,7 @@ export function ProductTableRow({ product }: { product: Product }) {
         </p>
       </TableCell>
       <TableCell className="text-right">
-        <Actions />
+        <ProductActions product={product} />
       </TableCell>
     </TableRow>
   );
@@ -113,7 +101,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
       <div className="flex items-center justify-between">
         <p className="text-lg font-mono font-medium">{formatPrice(product.precio)}</p>
-        <Actions />
+        <ProductActions product={product} />
       </div>
     </div>
   );

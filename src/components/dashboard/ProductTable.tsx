@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PackageSearch, SearchX } from 'lucide-react';
 import Search from '@/components/dashboard/Search';
 import Paginator from '@/components/dashboard/Paginator';
 import ProductCard, { ProductTableRow } from '@/components/dashboard/product/ProductCard';
 import EmptyState from '@/components/dashboard/EmptyState';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -15,7 +16,7 @@ import {
 import type { Product } from '@/lib/types';
 
 interface Props {
-  products: Product[];
+  products?: Product[];
   emptyTitle?: string;
   emptyDescription?: string;
 }
@@ -29,17 +30,42 @@ export default function ProductTable({
 }: Props) {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
+  const [loaded, setLoaded] = useState<Product[] | undefined>(products);
+
+  useEffect(() => {
+    if (products !== undefined) return;
+    let active = true;
+
+    fetch('/api/productos')
+      .then((res) => {
+        if (!res.ok) throw new Error('error');
+        return res.json();
+      })
+      .then((data) => {
+        if (active) setLoaded(data as Product[]);
+      })
+      .catch(() => {
+        if (active) setLoaded([]);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [products]);
+
+  const list = loaded;
+  const loading = list === undefined;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return products;
-    return products.filter(
+    if (!q) return list ?? [];
+    return (list ?? []).filter(
       (p) =>
         p.nombre.toLowerCase().includes(q) ||
         p.descripcion_corta.toLowerCase().includes(q) ||
         p.descripcion_larga.toLowerCase().includes(q)
     );
-  }, [products, query]);
+  }, [list, query]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
@@ -56,7 +82,60 @@ export default function ProductTable({
     <section className="sm:p-5 sm:rounded-xl sm:border border-border space-y-5">
       <Search value={query} onChange={handleQueryChange} />
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="space-y-5">
+          <div className="hidden md:block">
+            <div className="divide-y">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="flex items-center gap-x-4 py-3.5">
+                  <Skeleton className="size-12 rounded-lg" />
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <Skeleton className="h-4 w-2/3" />
+                    <Skeleton className="h-3 w-1/2" />
+                  </div>
+                  <div className="w-24 shrink-0 space-y-2">
+                    <Skeleton className="h-4 w-20 ml-auto" />
+                    <Skeleton className="h-3 w-14 ml-auto" />
+                  </div>
+                  <div className="w-32 shrink-0 space-y-2">
+                    <Skeleton className="h-4 w-16" />
+                    <Skeleton className="h-3 w-10" />
+                  </div>
+                  <div className="w-32 shrink-0 space-y-2">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                  <Skeleton className="size-8 rounded-full shrink-0" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="md:hidden flex flex-col gap-y-3">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="border border-border rounded-xl p-4 space-y-3">
+                <div className="flex items-center gap-x-3">
+                  <Skeleton className="size-12 rounded-lg" />
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <Skeleton className="h-4 w-2/3" />
+                    <Skeleton className="h-3 w-1/2" />
+                  </div>
+                  <Skeleton className="h-5 w-16 rounded-full" />
+                </div>
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-3 w-3/4" />
+                <div className="flex items-center justify-between pt-1">
+                  <Skeleton className="h-5 w-20" />
+                  <div className="flex items-center gap-x-1">
+                    <Skeleton className="size-8 rounded-full" />
+                    <Skeleton className="size-8 rounded-full" />
+                    <Skeleton className="size-8 rounded-full" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : filtered.length === 0 ? (
         <EmptyState
           icon={hasQuery ? <SearchX className="size-5" /> : <PackageSearch className="size-5" />}
           title={hasQuery ? 'Sin resultados' : emptyTitle}

@@ -19,14 +19,16 @@ equipo comparten el **mismo catálogo** (productos y servicios); no hay catálog
 - `supabase/migrations/0003_team.sql`: tabla `team`, función `is_team_member()`, RLS compartido en
   `productos`/`servicios` y seed del admin. Ver `docs/adr/0004-equipo-catalogo-compartido.md`.
 - `src/lib/types.ts`: tipo `TeamMember`.
-- `src/lib/db/team.ts`: `getTeamMembers`, `getTeamMemberById`, `createTeamMember`, `updateTeamMember`,
+- `src/lib/db/team.ts`: `getTeamMembers`, `createTeamMember`, `updateTeamMember`,
   `deleteTeamMember`.
 - `src/lib/supabase/admin.ts`: cliente con `SUPABASE_SERVICE_ROLE_KEY` para `auth.admin.*` (solo
   server-side; la key nunca debe llegar al cliente ni versionarse).
-- `src/pages/api/team.ts` (POST) y `src/pages/api/team/[id].ts` (PATCH/DELETE).
-- Páginas: `src/pages/dashboard/team/{index,nuevo,[id],[id]/editar}.astro`; secciones en
-  `src/sections/dashboard/team/`; componentes en `src/components/dashboard/team/` y
-  `src/components/dashboard/TeamTable.tsx`.
+- `src/pages/api/team.ts` (GET/POST) y `src/pages/api/team/[id].ts` (PATCH/DELETE).
+- Página: `src/pages/dashboard/team/index.astro`; secciones en `src/sections/dashboard/team/`;
+  componentes en `src/components/dashboard/team/` y `src/components/dashboard/TeamTable.tsx`.
+- El detalle de un miembro **no es una página**: ver, agregar y editar se hacen con dialogs
+  (`TeamViewDialog`, `TeamFormDialog`, `AddMemberButton` en `TeamActions.tsx`). Al guardar/eliminar,
+  los componentes disparan el evento `team:changed` para que la tabla se refresque.
 
 ## Notas de seguridad
 

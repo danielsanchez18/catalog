@@ -16,7 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import type { Service } from '@/lib/types';
+import type { Product } from '@/lib/types';
 import { formatPrice } from '@/lib/format';
 
 const formatDate = (date: string) =>
@@ -26,14 +26,20 @@ const formatDate = (date: string) =>
     year: 'numeric',
   });
 
-const estadoLabel = (estado: Service['estado']) =>
+const categoryLabel: Record<Product['categoria'], string> = {
+  papeleria: 'Papelería',
+  bisuteria: 'Bisutería',
+  cuidado_personal: 'Cuidado Personal',
+};
+
+const estadoLabel = (estado: Product['estado']) =>
   estado === 'publicado' ? 'Publicado' : estado === 'eliminado' ? 'Eliminado' : 'Borrador';
 
 interface Props {
-  service: Service;
+  product: Product;
 }
 
-function ServiceViewDialog({ service }: Props) {
+function ProductViewDialog({ product }: Props) {
   return (
     <Dialog>
       <DialogTrigger render={<Button variant="ghost" size="icon" title="Ver" />}>
@@ -41,7 +47,7 @@ function ServiceViewDialog({ service }: Props) {
       </DialogTrigger>
       <DialogPopup className="max-w-xl gap-y-5 p-0 overflow-hidden">
         <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
-          <DialogTitle className="text-base font-medium font-sans">Detalle del servicio</DialogTitle>
+          <DialogTitle className="text-base font-medium font-sans">Detalle del producto</DialogTitle>
           <DialogClose
             render={
               <Button variant="ghost" size="icon" className="size-7 rounded-full" aria-label="Cerrar">
@@ -54,40 +60,48 @@ function ServiceViewDialog({ service }: Props) {
         <div className="max-h-[60dvh] overflow-y-auto px-5 pb-5 space-y-5">
           <div className="flex items-start gap-x-4">
             <div className="relative w-20 h-20 shrink-0 overflow-hidden rounded-xl bg-accent">
-              {service.imagen_url ? (
+              {product.imagen_url ? (
                 <img
-                  src={service.imagen_url}
-                  alt={service.nombre}
+                  src={product.imagen_url}
+                  alt={product.nombre}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               ) : null}
             </div>
             <div className="min-w-0 space-y-1">
-              <p className="text-lg font-medium leading-tight font-sans">{service.nombre}</p>
-              <p className="text-sm text-muted-foreground">Servicio</p>
+              <p className="text-lg font-medium leading-tight font-sans">{product.nombre}</p>
+              <p className="text-sm text-muted-foreground">{categoryLabel[product.categoria]}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-x-5 gap-y-4">
             <div className="space-y-0.5">
-              <p className="text-xs text-muted-foreground">Precio desde</p>
-              <p className="text-lg font-mono font-medium">{formatPrice(service.precio_minimo)}</p>
+              <p className="text-xs text-muted-foreground">Precio</p>
+              <p className="text-lg font-mono font-medium">{formatPrice(product.precio)}</p>
             </div>
             <div className="space-y-0.5">
               <p className="text-xs text-muted-foreground">Estado</p>
-              <p className="text-sm font-medium">{estadoLabel(service.estado)}</p>
+              <p className="text-sm font-medium">{estadoLabel(product.estado)}</p>
             </div>
+            {product.etiqueta ? (
+              <div className="space-y-0.5">
+                <p className="text-xs text-muted-foreground">Etiqueta</p>
+                <p className="text-sm font-medium">
+                  {product.etiqueta === 'nuevo' ? 'Nuevo' : 'Promoción'}
+                </p>
+              </div>
+            ) : null}
           </div>
 
           <div className="space-y-3">
             <div className="space-y-1">
               <p className="text-xs text-muted-foreground">Descripción corta</p>
-              <p className="text-sm">{service.descripcion_corta}</p>
+              <p className="text-sm">{product.descripcion_corta}</p>
             </div>
-            {service.descripcion_larga ? (
+            {product.descripcion_larga ? (
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Descripción larga</p>
-                <p className="text-sm leading-relaxed">{service.descripcion_larga}</p>
+                <p className="text-sm leading-relaxed">{product.descripcion_larga}</p>
               </div>
             ) : null}
           </div>
@@ -95,7 +109,7 @@ function ServiceViewDialog({ service }: Props) {
           <div className="flex items-center gap-x-3 border-t border-border pt-4 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-x-1">
               <CalendarDays className="size-3.5" />
-              Creado el {formatDate(service.created_at)}
+              Creado el {formatDate(product.created_at)}
             </span>
           </div>
         </div>
@@ -104,7 +118,7 @@ function ServiceViewDialog({ service }: Props) {
   );
 }
 
-function DeleteAlert({ service }: Props) {
+function DeleteAlert({ product }: Props) {
   const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleted, setDeleted] = useState(false);
@@ -113,12 +127,12 @@ function DeleteAlert({ service }: Props) {
 
   const handleDelete = async () => {
     setDeleting(true);
-    const res = await fetch(`/api/servicios/${service.id}`, { method: 'DELETE' });
+    const res = await fetch(`/api/productos/${product.id}`, { method: 'DELETE' });
     setDeleting(false);
 
     if (!res.ok) {
       const data = await res.json().catch(() => null);
-      toast.error('No se pudo eliminar el servicio', {
+      toast.error('No se pudo eliminar el producto', {
         description: data?.error ?? 'Ocurrió un error. Intenta de nuevo.',
       });
       return;
@@ -126,8 +140,8 @@ function DeleteAlert({ service }: Props) {
 
     setOpen(false);
     setDeleted(true);
-    toast('Servicio eliminado', {
-      description: 'El servicio ya no se muestra en el catálogo.',
+    toast('Producto eliminado', {
+      description: 'El producto ya no se muestra en el catálogo.',
       icon: <Trash2 className="size-4 min-w-4 text-destructive" />,
     });
   };
@@ -139,10 +153,10 @@ function DeleteAlert({ service }: Props) {
       </AlertDialogTrigger>
       <AlertDialogPopup className="px-5 py-4">
         <AlertDialogTitle className="font-sans font-medium">
-          ¿Eliminar este servicio?
+          ¿Eliminar este producto?
         </AlertDialogTitle>
         <AlertDialogDescription className="text-sm">
-          Se eliminará «{service.nombre}» y dejará de mostrarse en el catálogo. Esta acción es
+          Se eliminará «{product.nombre}» y dejará de mostrarse en el catálogo. Esta acción es
           reversible: podrás restaurarlo desde el panel.
         </AlertDialogDescription>
         <div className="flex justify-end gap-x-2">
@@ -168,20 +182,20 @@ function DeleteAlert({ service }: Props) {
   );
 }
 
-export default function ServiceActions({ service }: Props) {
+export default function ProductActions({ product }: Props) {
   return (
     <div className="flex items-center justify-end gap-x-1">
-      <ServiceViewDialog service={service} />
+      <ProductViewDialog product={product} />
       <Button
         variant="ghost"
         size="icon"
         title="Editar"
         nativeButton={false}
-        render={createElement('a', { href: `/dashboard/servicios/${service.id}/editar` })}
+        render={createElement('a', { href: `/dashboard/productos/${product.id}/editar` })}
       >
         <Pencil className="size-4" />
       </Button>
-      <DeleteAlert service={service} />
+      <DeleteAlert product={product} />
     </div>
   );
 }

@@ -1,6 +1,5 @@
-import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
+import ServiceActions from '@/components/dashboard/service/ServiceActions';
 import type { Service } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { formatPrice } from '@/lib/format';
@@ -26,17 +25,6 @@ const StatusBadge = ({ service }: { service: Service }) => {
     </span>
   );
 };
-
-const Actions = () => (
-  <div className="flex items-center justify-end gap-x-1">
-    <Button variant="ghost" size="icon" title="Editar">
-      <Pencil className="size-4" />
-    </Button>
-    <Button variant="ghost" size="icon" title="Eliminar">
-      <Trash2 className="size-4" />
-    </Button>
-  </div>
-);
 
 export function ServiceTableRow({ service }: { service: Service }) {
   return (
@@ -79,7 +67,7 @@ export function ServiceTableRow({ service }: { service: Service }) {
         </p>
       </TableCell>
       <TableCell className="text-right">
-        <Actions />
+        <ServiceActions service={service} />
       </TableCell>
     </TableRow>
   );
@@ -116,7 +104,7 @@ export default function ServiceCard({ service }: { service: Service }) {
 
       <div className="flex items-center justify-between">
         <p className="text-lg font-mono font-medium">{formatPrice(service.precio_minimo)}</p>
-        <Actions />
+        <ServiceActions service={service} />
       </div>
     </div>
   );

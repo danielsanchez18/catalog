@@ -61,6 +61,40 @@ export async function getProductById(cookies: AstroCookies, id: string): Promise
   return data ? mapRow(data) : null;
 }
 
+export async function getPublishedProducts(cookies: AstroCookies): Promise<Product[]> {
+  const supabase = createClient(cookies);
+  const { data, error } = await supabase
+    .from('productos')
+    .select(SELECT)
+    .eq('estado', 'publicado')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []).map(mapRow);
+}
+
+export async function getPublishedProductById(
+  cookies: AstroCookies,
+  id: string
+): Promise<Product | null> {
+  const supabase = createClient(cookies);
+  const { data, error } = await supabase
+    .from('productos')
+    .select(SELECT)
+    .eq('id', id)
+    .eq('estado', 'publicado')
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ? mapRow(data) : null;
+}
+
 export async function createProduct(cookies: AstroCookies, input: ProductInput): Promise<Product> {
   const supabase = createClient(cookies);
   const { data, error } = await supabase

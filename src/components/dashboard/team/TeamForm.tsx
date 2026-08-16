@@ -27,9 +27,12 @@ const toFormState = (member: TeamMember): FormState => ({
 
 interface Props {
   member?: TeamMember;
+  onSuccess?: () => void;
+  onCancel?: () => void;
+  embedded?: boolean;
 }
 
-export default function TeamForm({ member }: Props) {
+export default function TeamForm({ member, onSuccess, onCancel, embedded }: Props) {
   const memberId = member?.id;
   const [form, setForm] = useState<FormState>(member ? toFormState(member) : { ...EMPTY_FORM });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -105,13 +108,19 @@ export default function TeamForm({ member }: Props) {
       });
     }
 
-    window.setTimeout(() => {
-      window.location.href = memberId ? `/dashboard/team/${memberId}` : '/dashboard/team';
-    }, 900);
+    onSuccess?.();
+  };
+
+  const handleCancel = () => {
+    onCancel?.();
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="sm:p-5 sm:rounded-xl sm:border border-border space-y-5">
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className={embedded ? 'space-y-5' : 'sm:p-5 sm:rounded-xl sm:border border-border space-y-5'}
+    >
       <div className="space-y-2">
         <Label htmlFor="full_name">Nombre</Label>
         <Input
@@ -160,8 +169,7 @@ export default function TeamForm({ member }: Props) {
           type="button"
           variant="outline"
           className="rounded-full px-3 py-1.5 h-fit"
-          nativeButton={false}
-          render={<a href={memberId ? `/dashboard/team/${memberId}` : '/dashboard/team'} />}
+          onClick={handleCancel}
         >
           Cancelar
         </Button>

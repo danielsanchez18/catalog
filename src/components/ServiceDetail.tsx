@@ -1,13 +1,80 @@
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Tag } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ArrowLeft, CalendarClock, Tag } from 'lucide-react';
+import ServiceCard from '@/components/ServiceCard';
 import type { Service } from '@/lib/types';
 import { formatPrice } from '@/lib/format';
 
 interface Props {
-  service: Service;
+  id: string;
 }
 
-export default function ServiceDetail({ service }: Props) {
+type State =
+  | { status: 'loading' }
+  | { status: 'not-found' }
+  | { status: 'ready'; service: Service; related: Service[] };
+
+export default function ServiceDetail({ id }: Props) {
+  const [state, setState] = useState<State>({ status: 'loading' });
+
+  useEffect(() => {
+    let active = true;
+
+    setState({ status: 'loading' });
+
+    Promise.all([
+      fetch(`/api/publico/servicios/${id}`),
+      fetch('/api/publico/servicios'),
+    ])
+      .then(([serviceRes, listRes]) =>
+        Promise.all([
+          serviceRes.ok ? serviceRes.json() : Promise.reject(new Error('not-found')),
+          listRes.json(),
+        ])
+      )
+      .then(([service, list]: [Service, Service[]]) => {
+        if (!active) return;
+        setState({
+          status: 'ready',
+          service,
+          related: list.filter((s) => s.id !== service.id).slice(0, 3),
+        });
+      })
+      .catch(() => {
+        if (active) setState({ status: 'not-found' });
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  if (state.status === 'loading') {
+    return <ServiceDetailSkeleton />;
+  }
+
+  if (state.status === 'not-found') {
+    return (
+      <div className="flex flex-col items-center justify-center gap-y-3 py-20 text-center">
+        <CalendarClock className="size-10 text-muted-foreground" />
+        <h1 className="text-xl font-medium">Servicio no encontrado</h1>
+        <p className="text-sm text-muted-foreground">
+          El servicio que buscas no existe o no está disponible.
+        </p>
+        <Button
+          variant="outline"
+          className="rounded-full"
+          render={<a href="/servicios" />}
+        >
+          Volver a servicios
+        </Button>
+      </div>
+    );
+  }
+
+  const { service, related } = state;
+
   return (
     <>
       <Button
@@ -21,11 +88,13 @@ export default function ServiceDetail({ service }: Props) {
 
       <article className="grid sm:grid-cols-2 gap-8">
         <div className="relative overflow-hidden rounded-lg bg-accent h-80 sm:h-full min-h-64">
-          <img
-            src={service.imagen_url}
-            alt={service.nombre}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+          {service.imagen_url ? (
+            <img
+              src={service.imagen_url}
+              alt={service.nombre}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          ) : null}
           <p className="absolute top-3 left-3 rounded-full w-fit bg-white px-3 py-1 text-xs font-mono font-medium z-10">
             <Tag className="inline size-3 mr-1" />
             Publicado
@@ -61,6 +130,47 @@ export default function ServiceDetail({ service }: Props) {
               day: 'numeric',
             })}
           </p>
+        </div>
+      </article>
+
+      {related.length > 0 ? (
+        <section className="w-full space-y-10 border-t border-border pt-10">
+          <div className="space-y-1">
+            <p className="text-sm">También te puede interesar</p>
+            <h2 className="text-2xl font-display uppercase font-medium">Servicios relacionados</h2>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-3">
+            {related.map((service) => (
+              <ServiceCard key={service.id} service={service} />
+            ))}
+          </div>
+        </section>
+      ) : null}
+    </>
+  );
+}
+
+function ServiceDetailSkeleton() {
+  return (
+    <>
+      <Skeleton className="h-4 w-40" />
+      <article className="grid sm:grid-cols-2 gap-8">
+        <Skeleton className="h-80 sm:h-full min-h-64 rounded-lg" />
+        <div className="flex flex-col gap-y-4 py-2">
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-8 w-3/4" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
+          <div className="border-t border-border pt-4">
+            <Skeleton className="h-8 w-28" />
+          </div>
+          <Skeleton className="h-9 w-32 rounded-full mt-2" />
         </div>
       </article>
     </>

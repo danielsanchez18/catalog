@@ -5,7 +5,7 @@ import { isTeamMember } from '@/lib/db/team';
 const supabaseUrl = import.meta.env.SUPABASE_URL as string | undefined;
 const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY as string | undefined;
 
-const PUBLIC_API_PATHS = ['/api/auth/login', '/api/auth/logout'];
+const PUBLIC_API_PATHS = ['/api/auth/login', '/api/auth/logout', '/api/publico'];
 
 function isPublicApi(pathname: string): boolean {
   return PUBLIC_API_PATHS.some((path) => pathname === path || pathname.startsWith(path + '/'));

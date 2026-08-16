@@ -1,4 +1,4 @@
-import { createElement, useState } from 'react';
+import { useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner';
@@ -9,14 +9,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import type { Product } from '@/lib/types';
+import type { Service } from '@/lib/types';
 
 interface Props {
-  product: Product;
+  service: Service;
 }
 
-export default function DetailActions({ product }: Props) {
-  const [deleted, setDeleted] = useState(product.estado === 'eliminado');
+export default function ServiceDetailActions({ service }: Props) {
+  const [deleted, setDeleted] = useState(service.estado === 'eliminado');
   const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -24,12 +24,12 @@ export default function DetailActions({ product }: Props) {
 
   const handleDelete = async () => {
     setDeleting(true);
-    const res = await fetch(`/api/productos/${product.id}`, { method: 'DELETE' });
+    const res = await fetch(`/api/servicios/${service.id}`, { method: 'DELETE' });
     setDeleting(false);
 
     if (!res.ok) {
       const data = await res.json().catch(() => null);
-      toast.error('No se pudo eliminar el producto', {
+      toast.error('No se pudo eliminar el servicio', {
         description: data?.error ?? 'Ocurrió un error. Intenta de nuevo.',
       });
       return;
@@ -37,8 +37,8 @@ export default function DetailActions({ product }: Props) {
 
     setOpen(false);
     setDeleted(true);
-    toast('Producto eliminado', {
-      description: 'El producto ya no se muestra en el catálogo.',
+    toast('Servicio eliminado', {
+      description: 'El servicio ya no se muestra en el catálogo.',
       icon: <Trash2 className="size-4 min-w-4 text-destructive" />,
     });
   };
@@ -50,7 +50,7 @@ export default function DetailActions({ product }: Props) {
           variant="outline"
           className="rounded-full"
           nativeButton={false}
-          render={createElement('a', { href: `/dashboard/productos/${product.id}/editar` })}
+          render={<a href={`/dashboard/servicios/${service.id}/editar`} />}
         >
           <Pencil className="size-3.5" />
           Editar
@@ -65,9 +65,9 @@ export default function DetailActions({ product }: Props) {
             }
           />
           <AlertDialogPopup className="px-5 py-4">
-            <AlertDialogTitle className="font-sans font-medium">¿Eliminar este producto?</AlertDialogTitle>
+            <AlertDialogTitle className="font-sans font-medium">¿Eliminar este servicio?</AlertDialogTitle>
             <AlertDialogDescription className="text-sm">
-              Se eliminará «{product.nombre}» y dejará de mostrarse en el catálogo. Esta acción es
+              Se eliminará «{service.nombre}» y dejará de mostrarse en el catálogo. Esta acción es
               reversible: podrás restaurarlo desde el panel.
             </AlertDialogDescription>
             <div className="flex justify-end gap-x-2">

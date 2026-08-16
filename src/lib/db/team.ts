@@ -66,21 +66,6 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
   return (data ?? []).map(mapRow);
 }
 
-export async function getTeamMemberById(id: string): Promise<TeamMember | null> {
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from('team')
-    .select(SELECT)
-    .eq('user_id', id)
-    .maybeSingle();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data ? mapRow(data) : null;
-}
-
 export async function createTeamMember(input: TeamMemberInput): Promise<TeamMember> {
   const supabase = createAdminClient();
 

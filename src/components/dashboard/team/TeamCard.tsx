@@ -1,6 +1,5 @@
-import { Pencil, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
+import TeamActions from '@/components/dashboard/team/TeamActions';
 import type { TeamMember } from '@/lib/types';
 
 const formatDate = (date: string) =>
@@ -22,17 +21,6 @@ const Avatar = ({ member }: { member: TeamMember }) => (
   </div>
 );
 
-const Actions = () => (
-  <div className="flex items-center justify-end gap-x-1">
-    <Button variant="ghost" size="icon" title="Editar">
-      <Pencil className="size-4" />
-    </Button>
-    <Button variant="ghost" size="icon" title="Eliminar">
-      <Trash2 className="size-4" />
-    </Button>
-  </div>
-);
-
 export function TeamTableRow({ member }: { member: TeamMember }) {
   return (
     <TableRow>
@@ -40,12 +28,7 @@ export function TeamTableRow({ member }: { member: TeamMember }) {
         <div className="flex items-center gap-x-3 min-w-0">
           <Avatar member={member} />
           <div className="flex flex-col min-w-0">
-            <a
-              href={`/dashboard/team/${member.id}`}
-              className="text-sm font-medium truncate hover:underline"
-            >
-              {member.full_name ?? 'Sin nombre'}
-            </a>
+            <p className="text-sm font-medium truncate">{member.full_name ?? 'Sin nombre'}</p>
             <p className="text-sm text-muted-foreground truncate max-w-72">{member.email}</p>
           </div>
         </div>
@@ -64,7 +47,7 @@ export function TeamTableRow({ member }: { member: TeamMember }) {
         </p>
       </TableCell>
       <TableCell className="text-right">
-        <Actions />
+        <TeamActions member={member} />
       </TableCell>
     </TableRow>
   );
@@ -77,12 +60,7 @@ export default function TeamCard({ member }: { member: TeamMember }) {
         <div className="flex items-center gap-x-3 min-w-0">
           <Avatar member={member} />
           <div className="flex flex-col min-w-0">
-            <a
-              href={`/dashboard/team/${member.id}`}
-              className="text-sm font-medium hover:underline"
-            >
-              {member.full_name ?? 'Sin nombre'}
-            </a>
+            <p className="text-sm font-medium truncate">{member.full_name ?? 'Sin nombre'}</p>
             <p className="text-sm text-muted-foreground truncate">{member.email}</p>
           </div>
         </div>
@@ -93,7 +71,7 @@ export default function TeamCard({ member }: { member: TeamMember }) {
 
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">{formatDate(member.created_at)}</p>
-        <Actions />
+        <TeamActions member={member} />
       </div>
     </div>
   );

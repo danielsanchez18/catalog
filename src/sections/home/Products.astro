@@ -2,7 +2,6 @@
 import CategoriesBar from "@/components/CategoriesBar.astro";
 import ProductGrid from "@/components/ProductGrid";
 import { Button } from "@/components/ui/button";
-import { getPublishedProducts } from "@/lib/products";
 ---
 
 <section class="w-full space-y-10">
@@ -14,7 +13,7 @@ import { getPublishedProducts } from "@/lib/products";
 
     <div class="flex flex-col gap-y-10">
         <CategoriesBar />
-        <ProductGrid products={getPublishedProducts()} />
+        <ProductGrid client:load />
         <Button variant="outline" className="px-3 rounded-full mx-auto">Ver más</Button>
     </div>
 

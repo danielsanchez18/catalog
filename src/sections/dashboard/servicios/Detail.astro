@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { createElement } from 'react';
 import { ArrowLeft, CalendarDays } from 'lucide-react';
-import ServiceActions from '@/components/dashboard/service/ServiceActions';
+import ServiceDetailActions from '@/components/dashboard/service/ServiceDetailActions';
 import type { Service } from '@/lib/types';
 import { formatPrice } from '@/lib/format';
 
@@ -87,4 +87,4 @@ const estadoLabel =
     </article>
 </div>
 
-<ServiceActions service={service} client:load />
+<ServiceDetailActions service={service} client:load />

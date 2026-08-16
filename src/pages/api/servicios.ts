@@ -1,8 +1,29 @@
 import type { APIRoute } from 'astro';
 import { createClient } from '@/lib/supabase/server';
-import { createService } from '@/lib/db/services';
+import { createService, getServices } from '@/lib/db/services';
 
 export const prerender = false;
+
+export const GET: APIRoute = async ({ cookies }) => {
+  const supabase = createClient(cookies);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return new Response(JSON.stringify({ error: 'No autorizado.' }), { status: 401 });
+  }
+
+  try {
+    const services = await getServices(cookies);
+    return new Response(JSON.stringify(services), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: (e as Error).message }), { status: 500 });
+  }
+};
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   const supabase = createClient(cookies);
