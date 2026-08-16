@@ -4,16 +4,16 @@ import Navlink from '@/components/dashboard/Navlink.astro';
 import Dashboard from '@/layouts/Dashboard.astro';
 import Breadcrumb from '@/components/dashboard/Breadcrumb';
 import Detail from '@/sections/dashboard/servicios/Detail.astro';
-import { getServices } from '@/lib/services';
+import { getServiceById } from '@/lib/db/services';
 
-export function getStaticPaths() {
-    return getServices().map((service) => ({
-        params: { id: service.id },
-        props: { service },
-    }));
+export const prerender = false;
+
+const { id } = Astro.params;
+
+const service = await getServiceById(Astro.cookies, id!);
+if (!service) {
+    return Astro.redirect('/dashboard/servicios');
 }
-
-const { service } = Astro.props;
 ---
 
 <Dashboard>

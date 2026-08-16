@@ -14,6 +14,7 @@ Aplicación web tipo catálogo/tienda de **vendedor único**. Técnicamente se c
 | Capa               | Tecnología                 | Notas                                        |
 | ------------------ | -------------------------- | -------------------------------------------- |
 | Framework          | Astro 7                    | Estático + SSR según ruta                    |
+| Deploy             | Vercel (`@astrojs/vercel`) | Serverless functions para las rutas SSR     |
 | Lenguaje           | TypeScript                 | Modo estricto                                |
 | Islas de UI        | React 19 (`@astrojs/react`)| Solo para componentes interactivos (shadcn)  |
 | Base de datos      | Supabase (PostgreSQL)      | Única fuente de datos                        |

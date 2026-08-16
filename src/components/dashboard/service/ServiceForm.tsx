@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/sonner';
 import type { Service } from '@/lib/types';
+import { formatPrice } from '@/lib/format';
 
 const ESTADO_ITEMS = [
   { label: 'Borrador', value: 'borrador' },
@@ -41,9 +42,6 @@ const EMPTY_FORM: FormState = {
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
-const formatPrice = (price: number) =>
-  price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-
 const toFormState = (service: Service): FormState => ({
   nombre: service.nombre,
   descripcion_corta: service.descripcion_corta,
@@ -59,10 +57,9 @@ interface Props {
 
 export default function ServiceForm({ service }: Props) {
   const serviceId = service?.id;
-  const existing = service;
   const [form, setForm] = useState<FormState>(service ? toFormState(service) : { ...EMPTY_FORM });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [saved, setSaved] = useState<Service[]>([]);
+  const [saving, setSaving] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(service?.imagen_url ?? null);
   const [imageError, setImageError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -121,7 +118,7 @@ export default function ServiceForm({ service }: Props) {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       toast.error('No se pudo guardar el servicio', {
@@ -130,20 +127,39 @@ export default function ServiceForm({ service }: Props) {
       });
       return;
     }
-    const now = new Date().toISOString();
-    const newService: Service = {
-      id: serviceId ?? crypto.randomUUID(),
+
+    const payload = {
       nombre: form.nombre.trim(),
       descripcion_corta: form.descripcion_corta.trim(),
       descripcion_larga: form.descripcion_larga.trim(),
       precio_minimo: Number(form.precio_minimo),
       estado: form.estado,
       imagen_url: form.imagen_url.trim() || undefined,
-      created_at: serviceId ? existing?.created_at ?? now : now,
-      updated_at: now,
     };
-    setSaved((list) => [newService, ...list]);
-    setForm({ ...EMPTY_FORM });
+
+    setSaving(true);
+
+    const url = serviceId ? `/api/servicios/${serviceId}` : '/api/servicios';
+    const method = serviceId ? 'PATCH' : 'POST';
+
+    const res = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    setSaving(false);
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      toast.error('No se pudo guardar el servicio', {
+        description: data?.error ?? 'Ocurrió un error al guardar. Intenta de nuevo.',
+      });
+      return;
+    }
+
+    const newService = (await res.json()) as Service;
+
     if (serviceId) {
       toast.success('Servicio actualizado', {
         description: `«${newService.nombre}» se guardó correctamente.`,
@@ -157,6 +173,10 @@ export default function ServiceForm({ service }: Props) {
         description: `«${newService.nombre}» no se mostrará en el catálogo hasta que lo publiques desde el panel.`,
       });
     }
+
+    window.setTimeout(() => {
+      window.location.href = serviceId ? `/dashboard/servicios/${serviceId}` : '/dashboard/servicios';
+    }, 900);
   };
 
   return (
@@ -200,7 +220,7 @@ export default function ServiceForm({ service }: Props) {
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="precio_minimo">Precio mínimo (MXN)</Label>
+          <Label htmlFor="precio_minimo">Precio mínimo (S/)</Label>
           <Input
             id="precio_minimo"
             type="number"
@@ -291,29 +311,10 @@ export default function ServiceForm({ service }: Props) {
         >
           Cancelar
         </Button>
-        <Button type="submit" className="rounded-full px-3 py-1.5 h-fit">
-          {serviceId ? 'Guardar cambios' : 'Guardar servicio'}
+        <Button type="submit" className="rounded-full px-3 py-1.5 h-fit" disabled={saving}>
+          {saving ? 'Guardando…' : serviceId ? 'Guardar cambios' : 'Guardar servicio'}
         </Button>
       </div>
-
-      {saved.length > 0 ? (
-        <div className="border-t border-border pt-4 space-y-3">
-          <p className="text-sm font-medium">
-            Servicios agregados en esta sesión ({saved.length})
-          </p>
-          <ul className="space-y-2">
-            {saved.map((s) => (
-              <li
-                key={s.id}
-                className="flex items-center justify-between gap-x-3 text-sm border border-border rounded-lg px-3 py-2"
-              >
-                <span className="font-medium truncate">{s.nombre}</span>
-                <span className="font-mono whitespace-nowrap">{formatPrice(s.precio_minimo)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
     </form>
   );
 }

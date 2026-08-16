@@ -1,13 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Tag } from 'lucide-react';
 import type { Service } from '@/lib/types';
+import { formatPrice } from '@/lib/format';
 
 interface Props {
   service: Service;
 }
-
-const formatPrice = (price: number) =>
-  price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
 export default function ServiceDetail({ service }: Props) {
   return (

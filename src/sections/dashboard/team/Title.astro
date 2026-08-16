@@ -1,0 +1,18 @@
+---
+import { Button } from '@/components/ui/button';
+import { createElement } from 'react';
+---
+
+<div class="flex items-center justify-between gap-x-5">
+    <div class="space-y-1">
+        <h1 class="text-lg font-medium font-sans">Panel de equipo</h1>
+        <p class="text-sm text-neutral-800">Miembros con acceso para gestionar el catálogo.</p>
+    </div>
+
+    <Button
+        className="px-3 rounded-full"
+        render={createElement('a', { href: '/dashboard/team/nuevo' })}
+    >
+        Agregar
+    </Button>
+</div>

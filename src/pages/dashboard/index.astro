@@ -3,7 +3,18 @@ import Header from '@/components/dashboard/Header.astro';
 import Navlink from '@/components/dashboard/Navlink.astro';
 import Dashboard from '@/layouts/Dashboard.astro';
 import Greeting from '@/sections/dashboard/overview/Greeting.astro';
+import Stats from '@/sections/dashboard/overview/Stats.astro';
+import RecentProducts from '@/sections/dashboard/overview/RecentProducts.astro';
 import Breadcrumb from '@/components/dashboard/Breadcrumb';
+import { getDashboardStats, getProfileName, getRecentProducts } from '@/lib/db/dashboard';
+
+export const prerender = false;
+
+const [name, stats, recentProducts] = await Promise.all([
+    getProfileName(Astro.cookies),
+    getDashboardStats(Astro.cookies),
+    getRecentProducts(Astro.cookies),
+]);
 ---
 
 <Dashboard>
@@ -16,6 +27,8 @@ import Breadcrumb from '@/components/dashboard/Breadcrumb';
     </div>
 
     <div class="w-full max-w-7xl mx-auto px-5 py-7 space-y-10">
-        <Greeting />
+        <Greeting name={name} />
+        <Stats stats={stats} />
+        <RecentProducts products={recentProducts} />
     </div>
 </Dashboard>

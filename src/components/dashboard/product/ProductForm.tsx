@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/sonner';
 import type { Product, ProductCategory, ProductTag } from '@/lib/types';
+import { formatPrice } from '@/lib/format';
 
 const CATEGORIES = [
   { label: 'Papelería', value: 'papeleria' },
@@ -61,9 +62,6 @@ const EMPTY_FORM: FormState = {
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
-const formatPrice = (price: number) =>
-  price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-
 const toFormState = (product: Product): FormState => ({
   nombre: product.nombre,
   descripcion_corta: product.descripcion_corta,
@@ -81,10 +79,9 @@ interface Props {
 
 export default function ProductForm({ product }: Props) {
   const productId = product?.id;
-  const existing = product;
   const [form, setForm] = useState<FormState>(product ? toFormState(product) : { ...EMPTY_FORM });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [saved, setSaved] = useState<Product[]>([]);
+  const [saving, setSaving] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(product?.imagen_url ?? null);
   const [imageError, setImageError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -143,7 +140,7 @@ export default function ProductForm({ product }: Props) {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       toast.error('No se pudo guardar el producto', {
@@ -152,9 +149,8 @@ export default function ProductForm({ product }: Props) {
       });
       return;
     }
-    const now = new Date().toISOString();
-    const product: Product = {
-      id: productId,
+
+    const payload = {
       nombre: form.nombre.trim(),
       descripcion_corta: form.descripcion_corta.trim(),
       descripcion_larga: form.descripcion_larga.trim(),
@@ -163,24 +159,46 @@ export default function ProductForm({ product }: Props) {
       etiqueta: form.etiqueta ?? undefined,
       estado: form.estado,
       imagen_url: form.imagen_url.trim() || undefined,
-      created_at: productId ? existing?.created_at ?? now : now,
-      updated_at: now,
     };
-    setSaved((list) => [product, ...list]);
-    setForm({ ...EMPTY_FORM });
+
+    setSaving(true);
+
+    const url = productId ? `/api/productos/${productId}` : '/api/productos';
+    const method = productId ? 'PATCH' : 'POST';
+
+    const res = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    setSaving(false);
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      toast.error('No se pudo guardar el producto', {
+        description: data?.error ?? 'Ocurrió un error al guardar. Intenta de nuevo.',
+      });
+      return;
+    }
+
     if (productId) {
       toast.success('Producto actualizado', {
-        description: `«${product.nombre}» se guardó correctamente.`,
+        description: `«${payload.nombre}» se guardó correctamente.`,
       });
-    } else if (product.estado === 'publicado') {
+    } else if (payload.estado === 'publicado') {
       toast.success('Producto publicado', {
-        description: `«${product.nombre}» se agregó al catálogo con un precio de ${formatPrice(product.precio)}. Ya es visible para los clientes.`,
+        description: `«${payload.nombre}» se agregó al catálogo con un precio de ${formatPrice(payload.precio)}. Ya es visible para los clientes.`,
       });
     } else {
       toast.info('Producto guardado como borrador', {
-        description: `«${product.nombre}» no se mostrará en el catálogo hasta que lo publiques desde el panel.`,
+        description: `«${payload.nombre}» no se mostrará en el catálogo hasta que lo publiques desde el panel.`,
       });
     }
+
+    window.setTimeout(() => {
+      window.location.href = productId ? `/dashboard/productos/${productId}` : '/dashboard/productos';
+    }, 900);
   };
 
   return (
@@ -246,7 +264,7 @@ export default function ProductForm({ product }: Props) {
 
       <div className="grid gap-5 sm:grid-cols-3">
         <div className="space-y-2">
-          <Label htmlFor="precio">Precio (MXN)</Label>
+          <Label htmlFor="precio">Precio (S/)</Label>
           <Input
             id="precio"
             type="number"
@@ -358,29 +376,10 @@ export default function ProductForm({ product }: Props) {
         >
           Cancelar
         </Button>
-        <Button type="submit" className="rounded-full px-3 py-1.5 h-fit">
-          {productId ? 'Guardar cambios' : 'Guardar producto'}
+        <Button type="submit" className="rounded-full px-3 py-1.5 h-fit" disabled={saving}>
+          {saving ? 'Guardando…' : productId ? 'Guardar cambios' : 'Guardar producto'}
         </Button>
       </div>
-
-      {saved.length > 0 ? (
-        <div className="border-t border-border pt-4 space-y-3">
-          <p className="text-sm font-medium">
-            Productos agregados en esta sesión ({saved.length})
-          </p>
-          <ul className="space-y-2">
-            {saved.map((p) => (
-              <li
-                key={p.id}
-                className="flex items-center justify-between gap-x-3 text-sm border border-border rounded-lg px-3 py-2"
-              >
-                <span className="font-medium truncate">{p.nombre}</span>
-                <span className="font-mono whitespace-nowrap">{formatPrice(p.precio)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
     </form>
   );
 }

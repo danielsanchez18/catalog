@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { label: 'Overview', href: '/dashboard' },
   { label: 'Productos', href: '/dashboard/productos' },
   { label: 'Servicios', href: '/dashboard/servicios' },
+  { label: 'Team', href: '/dashboard/team' },
   { label: 'Clientes', href: '/dashboard/clientes' },
 ];
 

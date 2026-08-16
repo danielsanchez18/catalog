@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, ShoppingBag, Tag } from 'lucide-react';
 import { createElement } from 'react';
 import type { Product } from '@/lib/types';
+import { formatPrice } from '@/lib/format';
 
 interface Props {
   product: Product;
@@ -11,9 +12,6 @@ interface Props {
 const { product } = Astro.props;
 
 const backLink = createElement('a', { href: '/productos' });
-
-const formatPrice = (price: number) =>
-  price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 ---
 
 <div class="flex flex-col gap-y-5">

@@ -35,3 +35,5 @@ Estado: propuesto
 | 0001 | Stack tecnológico (Astro + Supabase + Tailwind/shadcn + pnpm) | Aceptado  |
 | 0002 | UI con Tailwind v4 + shadcn/ui (Base UI) y tipografía propia | Aceptado  |
 | 0003 | Borrado lógico de productos y servicios (estado `eliminado`) | Aceptado  |
+| 0004 | Equipo con catálogo compartido (multi-admin)         | Aceptado  |
+| 0005 | Adapter de Vercel para SSR (`@astrojs/vercel`)       | Aceptado  |

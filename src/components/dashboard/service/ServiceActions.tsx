@@ -18,14 +18,28 @@ interface Props {
 export default function ServiceActions({ service }: Props) {
   const [deleted, setDeleted] = useState(service.estado === 'eliminado');
   const [open, setOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   if (deleted) return null;
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    setDeleting(true);
+    const res = await fetch(`/api/servicios/${service.id}`, { method: 'DELETE' });
+    setDeleting(false);
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      toast.error('No se pudo eliminar el servicio', {
+        description: data?.error ?? 'Ocurrió un error. Intenta de nuevo.',
+      });
+      return;
+    }
+
     setOpen(false);
     setDeleted(true);
     toast('Servicio eliminado', {
       description: 'El servicio ya no se muestra en el catálogo.',
+      icon: <Trash2 className="size-4 min-w-4 text-destructive" />,
     });
   };
 
@@ -50,9 +64,9 @@ export default function ServiceActions({ service }: Props) {
               </Button>
             }
           />
-          <AlertDialogPopup>
-            <AlertDialogTitle>¿Eliminar este servicio?</AlertDialogTitle>
-            <AlertDialogDescription>
+          <AlertDialogPopup className="px-5 py-4">
+            <AlertDialogTitle className="font-sans font-medium">¿Eliminar este servicio?</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm">
               Se eliminará «{service.nombre}» y dejará de mostrarse en el catálogo. Esta acción es
               reversible: podrás restaurarlo desde el panel.
             </AlertDialogDescription>
@@ -61,11 +75,17 @@ export default function ServiceActions({ service }: Props) {
                 variant="outline"
                 className="rounded-full px-3"
                 onClick={() => setOpen(false)}
+                disabled={deleting}
               >
                 Cancelar
               </Button>
-              <Button variant="destructive" className="rounded-full px-3" onClick={handleDelete}>
-                Eliminar
+              <Button
+                variant="destructive"
+                className="rounded-full px-3"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? 'Eliminando…' : 'Eliminar'}
               </Button>
             </div>
           </AlertDialogPopup>

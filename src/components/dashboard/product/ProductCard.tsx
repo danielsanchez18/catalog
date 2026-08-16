@@ -3,9 +3,7 @@ import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 import type { Product } from '@/lib/types';
 import { cn } from '@/lib/utils';
-
-const formatPrice = (price: number) =>
-  price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+import { formatPrice } from '@/lib/format';
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString('es-MX', {

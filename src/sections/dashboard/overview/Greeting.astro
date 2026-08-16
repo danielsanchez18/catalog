@@ -1,4 +1,12 @@
-<div>
-    <h1 class="text-lg font-medium font-sans">Buen día, Daniel Sánchez</h1>
-    <p class="text-sm">Esto está pasando en tu catálogo ahora.</p>
+---
+interface Props {
+    name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<div class="space-y-1">
+    <h1 class="text-lg font-medium font-sans">Buen día, {name}</h1>
+    <p class="text-sm text-neutral-800">Esto está pasando en tu catálogo ahora.</p>
 </div>

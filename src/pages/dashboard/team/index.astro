@@ -1,0 +1,25 @@
+---
+import Header from '@/components/dashboard/Header.astro';
+import Navlink from '@/components/dashboard/Navlink.astro';
+import Dashboard from '@/layouts/Dashboard.astro';
+import Title from '@/sections/dashboard/team/Title.astro';
+import List from '@/sections/dashboard/team/List.astro';
+import Breadcrumb from '@/components/dashboard/Breadcrumb';
+
+export const prerender = false;
+---
+
+<Dashboard>
+    <Header />
+    <div class="max-md:hidden">
+        <Navlink />
+    </div>
+    <div class="md:hidden">
+        <Breadcrumb current="Equipo" client:load />
+    </div>
+
+    <div class="w-full max-w-7xl mx-auto px-5 py-7 space-y-10">
+        <Title />
+        <List />
+    </div>
+</Dashboard>

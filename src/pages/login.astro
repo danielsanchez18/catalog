@@ -1,9 +1,8 @@
 ---
 import Auth from '../layouts/Auth.astro';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { AtSign, Lock, Eye } from 'lucide-react';
+import LoginForm from '@/components/auth/LoginForm';
+
+export const prerender = false;
 ---
 
 <Auth>
@@ -15,62 +14,8 @@ import { AtSign, Lock, Eye } from 'lucide-react';
             <p class="text-center text-neutral-800 mt-1">Bienvenido de vuelta. Ingresa tus credenciales</p>
         </div>
 
-        <div class="w-full max-w-xs flex flex-col gap-y-5">
-            <form action="/api/auth/login" method="POST" class="flex flex-col gap-y-5">
-                <div class="space-y-2">
-                    <Label 
-                        htmlFor="username"
-                    >
-                        Correo electrónico
-                    </Label>
-                    <div class="relative">
-                        <Input 
-                            id="username" 
-                            type="text" 
-                            name="username" 
-                            placeholder="Ingrese su correo electrónico" 
-                            required 
-                            className="pl-11"
-                        />
-                        <AtSign className="absolute left-4 top-5.25 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <Label 
-                        htmlFor="password"
-                    >
-                        Contraseña
-                    </Label>
-                    <div class="relative">
-                        <Input 
-                            id="password" 
-                            type="password" 
-                            name="password" 
-                            placeholder="Ingrese su contraseña" 
-                            required 
-                            autoComplete="current-password" 
-                            className="px-11"
-                        />
-                        <Lock className="absolute left-4 top-5.25 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-                        <Button className="absolute right-2 top-5.25 -translate-y-1/2 active:not-aria-[haspopup]:-translate-y-4" variant="ghost" size="icon">
-                            <Eye />
-                        </Button>
-                    </div>
-                </div>
-                <Button 
-                    type="submit" 
-                    className="w-full py-2.25 h-fit"
-                >
-                    Iniciar sesión
-                </Button>
-                <Button 
-                    variant="link" 
-                    className="w-fit mx-auto p-0 h-fit"
-                >
-                    Olvidé mi contraseña
-                </Button>
-            </form>
-
+        <div class="w-full max-w-xs">
+            <LoginForm client:load />
         </div>
 
     </div>

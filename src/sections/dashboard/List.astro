@@ -1,8 +1,8 @@
 ---
 import ProductTable from '@/components/dashboard/ProductTable';
-import { getProducts } from '@/lib/products';
+import { getProducts } from '@/lib/db/products';
 
-const products = getProducts();
+const products = await getProducts(Astro.cookies);
 ---
 
 <ProductTable products={products} client:load />

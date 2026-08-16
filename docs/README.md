@@ -20,6 +20,7 @@ docs/
 ├── auth/               # Módulo: autenticación y administración
 ├── productos/          # Módulo: gestión de productos (CRUD)
 ├── servicios/          # Módulo: gestión de servicios (CRUD)
+├── team/               # Módulo: equipo y acceso de administradores
 ├── catalogo/           # Módulo: catálogo público
 └── adr/                # Decisiones de arquitectura (ADR)
 ```
@@ -36,6 +37,7 @@ docs/
 | Autenticación (admin)         | `auth/README.md`                             |
 | Productos (CRUD y negocio)    | `productos/README.md`                        |
 | Servicios (CRUD y negocio)    | `servicios/README.md`                        |
+| Equipo y acceso de admin      | `team/README.md`                             |
 | Catálogo público              | `catalogo/README.md`                         |
 
 ## Estado de los módulos
@@ -44,8 +46,9 @@ docs/
 | --------- | ----------------------- |
 | General   | Definido (borrador)     |
 | Auth      | Mínimo, por implementar |
-| Productos | Por definir             |
-| Servicios | Por definir             |
+| Productos | Implementado            |
+| Servicios | Implementado            |
+| Team      | Implementado            |
 | Catálogo  | Por definir             |
 
 ## Reglas

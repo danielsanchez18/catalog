@@ -25,7 +25,7 @@ eliminar, con el mismo flujo que el módulo de productos.
 
 1. Un servicio se crea en estado **borrador** y solo es visible en el catálogo cuando se **publica**.
 2. Campos obligatorios para **publicar**: `nombre`, `descripcion_corta`, `precio_minimo`.
-3. `precio_minimo` debe ser **> 0** (moneda MXN).
+3. `precio_minimo` debe ser **> 0** (moneda PEN, soles peruanos).
 4. Solo el admin puede crear/editar/eliminar servicios (ver `docs/auth/README.md`).
 5. Eliminar un servicio es un **borrado lógico**: pasa a estado `eliminado` y deja de mostrarse en el
    catálogo, pero el registro se conserva (misma decisión que en productos, ver ADR-0003).

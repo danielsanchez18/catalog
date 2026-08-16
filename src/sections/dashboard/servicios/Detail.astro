@@ -4,11 +4,9 @@ import { createElement } from 'react';
 import { ArrowLeft, CalendarDays } from 'lucide-react';
 import ServiceActions from '@/components/dashboard/service/ServiceActions';
 import type { Service } from '@/lib/types';
+import { formatPrice } from '@/lib/format';
 
 const { service } = Astro.props;
-
-const formatPrice = (price: number) =>
-    price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
 const formatDate = (date: string) =>
     new Date(date).toLocaleDateString('es-MX', {

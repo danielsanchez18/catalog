@@ -1,8 +1,8 @@
 ---
 import ServiceTable from '@/components/dashboard/ServiceTable';
-import { getServices } from '@/lib/services';
+import { getServices } from '@/lib/db/services';
 
-const services = getServices();
+const services = await getServices(Astro.cookies);
 ---
 
 <ServiceTable services={services} client:load />

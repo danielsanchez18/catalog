@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/empty';
 import { cn } from '@/lib/utils';
 
-export interface EmptyStateProps extends ComponentProps<typeof Empty> {
+export interface EmptyStateProps extends Omit<ComponentProps<typeof Empty>, 'title'> {
   icon?: ReactNode;
   mediaClassName?: string;
   title: ReactNode;

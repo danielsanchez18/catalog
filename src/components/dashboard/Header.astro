@@ -17,16 +17,19 @@ import { Bell } from 'lucide-react';
                 size="icon">
                 <Bell />
             </Button>
-            <Button
-                variant="secondary"
-                size="icon-lg"
-                className="rounded-full overflow-hidden">
-                <img 
-                    src="https://avatars.githubusercontent.com/u/148911330?v=4" 
-                    alt="" 
-                    class="h-full w-full object-cover" 
-                />
-            </Button>
+            <form action="/api/auth/logout" method="POST">
+                <Button
+                    type="submit"
+                    variant="ghost"
+                    size="icon-lg"
+                    className="rounded-full overflow-hidden">
+                    <img 
+                        src="https://avatars.githubusercontent.com/u/148911330?v=4" 
+                        alt="" 
+                        class="h-full w-full object-cover" 
+                    />
+                </Button>
+            </form>
         </div>
 
     </div>

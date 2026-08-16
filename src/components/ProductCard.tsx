@@ -1,13 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { ShoppingBag } from 'lucide-react';
 import type { Product } from '@/lib/types';
+import { formatPrice } from '@/lib/format';
 
 interface Props {
   product: Product;
 }
-
-const formatPrice = (price: number) =>
-  price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
 export default function ProductCard({ product }: Props) {
   return (

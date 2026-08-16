@@ -4,16 +4,16 @@ import Navlink from '@/components/dashboard/Navlink.astro';
 import Dashboard from '@/layouts/Dashboard.astro';
 import Breadcrumb from '@/components/dashboard/Breadcrumb';
 import Detail from '@/sections/dashboard/productos/Detail.astro';
-import { getProducts } from '@/lib/products';
+import { getProductById } from '@/lib/db/products';
 
-export function getStaticPaths() {
-    return getProducts().map((product) => ({
-        params: { id: product.id },
-        props: { product },
-    }));
+export const prerender = false;
+
+const { id } = Astro.params;
+
+const product = await getProductById(Astro.cookies, id!);
+if (!product) {
+    return Astro.redirect('/dashboard/productos');
 }
-
-const { product } = Astro.props;
 ---
 
 <Dashboard>
